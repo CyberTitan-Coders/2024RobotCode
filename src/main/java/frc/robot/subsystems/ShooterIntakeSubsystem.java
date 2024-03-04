@@ -5,6 +5,7 @@ import frc.robot.Constants.operatorStuff;
 // https://software-metadata.revrobotics.com/REVLib-2024.json
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import edu.wpi.first.wpilibj.Ultrasonic;
 // import com.revrobotics.SparkAbsoluteEncoder.Type;
 // import com.revrobotics.AbsoluteEncoder;
 // import com.revrobotics.RelativeEncoder;
@@ -25,11 +26,10 @@ public class ShooterIntakeSubsystem extends SubsystemBase{
     private CANSparkMax bot = new CANSparkMax(operatorStuff.kBot_ID, MotorType.kBrushless);
     private CANSparkMax intake = new CANSparkMax(operatorStuff.kIntake_ID, MotorType.kBrushless);
 
-  public ShooterIntakeSubsystem(){
-  }
+  public ShooterIntakeSubsystem(){}
 
  
-    //bring it in
+    //bring it in --> backup 
     public Command keepIn(){
       return this.startEnd(
         // When the command is initialized, set the wheels to the intake speed values
@@ -43,12 +43,11 @@ public class ShooterIntakeSubsystem extends SubsystemBase{
         });
     }
     //shooter
-    public Command speaker(){
+    public Command shooterIn(){
       return this.startEnd(
         // When the command is initialized, set the wheels to the intake speed values
         () -> {
           setWheels(operatorStuff.kShootingSpeed);
-          setIntake(-(operatorStuff.kIntakeToShootingSpeed));
 
         },
         // When the command stops, stop the wheels
@@ -56,6 +55,21 @@ public class ShooterIntakeSubsystem extends SubsystemBase{
           stop();
         });
     }
+        public Command shooterOut(){
+      return this.startEnd(
+        // When the command is initialized, set the wheels to the intake speed values
+        () -> {
+          setWheels(-(operatorStuff.kShootingSpeed));
+
+        },
+        // When the command stops, stop the wheels
+        () -> {
+          stop();
+        });
+    }
+
+
+  
     //intake
     public Command intaking(){
       return this.startEnd(

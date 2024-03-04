@@ -16,15 +16,25 @@ public class Superstructure extends SubsystemBase{
     }
 
     public Command notePickupAuto(){
-        return Commands.sequence();
-    }
+        return Commands.sequence(
+            Commands.print("note pick up")
+            // write these functions 
+            // bring arm down 
+            // pick up note 
+            // bring arm up 
 
-    public Command ampScoreAuto(){
-        return Commands.sequence();
+        );
     }
 
     public Command speakerScoreAuto(){
-        return Commands.sequence();
+        return Commands.sequence(
+            Commands.print("speaker shot")
+             // bring arm up 
+            // run shooter 
+            // run intake 
+            // wait a period of time 
+            // stop intake and shooter / bring arm down 
+        );
     }
 
 }

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import  edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 // import edu.wpi.first.math.controller.PIDController;
 // import edu.wpi.first.math.controller.ProfiledPIDController;
 // import edu.wpi.first.math.geometry.Pose2d;
@@ -94,7 +95,7 @@ public class RobotContainer{
 
      m_arm.setDefaultCommand(
       // Operator: left joystick arm control  
-        new RunCommand(
+        new RunCommand(       
           () -> m_arm.set(-operatorStuff.kArmSpeed*
               MathUtil.applyDeadband(m_operatorController.getLeftY(),
               ArmConstants.kArmDeadband)),m_arm));
@@ -119,10 +120,17 @@ public class RobotContainer{
      * Start Button: 
      * A Button: intake in
      * B Button: intake out 
+     * Start Button: shooter set up 
+     * Back Button: amp set up 
      */
-        m_operatorController.start().whileTrue(m_shootingOrIntaking.speaker());
+        m_operatorController.x().whileTrue(m_shootingOrIntaking.shooterOut());
+        m_operatorController.y().whileTrue(m_shootingOrIntaking.shooterIn()); 
         m_operatorController.a().whileTrue(m_shootingOrIntaking.intaking());
         m_operatorController.b().whileTrue(m_shootingOrIntaking.keepIn());
+
+        // Move the arm to 2 radians above horizontal when the 'A' button is pressed.
+        m_operatorController.start().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30))); // --> change the radian 
+        m_operatorController.back().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30)));
         //left joystick charge up, press a button to move note in --> transfered to joystick controls 
         //  m_operatorController.x().whileTrue(m_arm.armClockWise());
         //  m_operatorController.y().whileTrue(m_arm.armCounterClockWise());

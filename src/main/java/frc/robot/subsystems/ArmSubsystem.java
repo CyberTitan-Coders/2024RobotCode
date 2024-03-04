@@ -135,12 +135,6 @@ public Command armCounterClockWise(){
     
     public void periodic(){
       SmartDashboard.getNumber("arm encoder",armAbsoluteEncoder.getPosition());
-      
-
     };
-   
-   
-
- 
     
 }

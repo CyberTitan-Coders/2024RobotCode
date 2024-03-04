@@ -25,7 +25,7 @@ import frc.robot.Constants.OIConstants;
  * project.
  */
 public class Robot extends TimedRobot {
-private static final String version = "2024 code test";
+private static final String version = "Jeanelle's laptop";
 
   // The following constants are array indices for tuning values
   public static final int kDriveRatio = 0;
