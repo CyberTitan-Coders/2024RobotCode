@@ -59,7 +59,6 @@ public class RobotContainer{
   private final ShooterIntakeSubsystem m_shootingOrIntaking = new ShooterIntakeSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
   private final ArmSubsystemPID m_arm = new ArmSubsystemPID();
-  private final Superstructure m_superStructure = new Superstructure(m_arm, m_shootingOrIntaking);
 
   // XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);

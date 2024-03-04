@@ -5,7 +5,7 @@ import frc.robot.Constants.operatorStuff;
 // https://software-metadata.revrobotics.com/REVLib-2024.json
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import edu.wpi.first.wpilibj.Ultrasonic;
+//import edu.wpi.first.wpilibj.Ultrasonic;
 // import com.revrobotics.SparkAbsoluteEncoder.Type;
 // import com.revrobotics.AbsoluteEncoder;
 // import com.revrobotics.RelativeEncoder;
