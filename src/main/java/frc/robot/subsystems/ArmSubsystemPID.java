@@ -24,8 +24,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-
-
 //import edu.wpi.first.wpilibj.ADXRS450_Gyro; // small FRC gyro in SPI slot
 // https://dev.studica.com/releases/2024/NavX.json
 
@@ -33,7 +31,6 @@ import com.revrobotics.SparkPIDController;
 //import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-
 
 
 public class ArmSubsystemPID extends TrapezoidProfileSubsystem{
@@ -85,8 +82,6 @@ public class ArmSubsystemPID extends TrapezoidProfileSubsystem{
       m_leftArm.burnFlash();
       m_rightArm.burnFlash();
     }
-
-
 
 // //should self explanatory
 // public Command armSpeakerAngle(){

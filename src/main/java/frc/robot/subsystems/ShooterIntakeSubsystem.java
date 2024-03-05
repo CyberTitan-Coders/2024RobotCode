@@ -5,6 +5,8 @@ import frc.robot.Constants.operatorStuff;
 // https://software-metadata.revrobotics.com/REVLib-2024.json
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.Ultrasonic;
 // import com.revrobotics.SparkAbsoluteEncoder.Type;
 // import com.revrobotics.AbsoluteEncoder;
@@ -17,18 +19,23 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 // import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 
+public class ShooterIntakeSubsystem extends SubsystemBase{  
+    private CANSparkMax top;
+    private CANSparkMax bot;
+    private CANSparkMax intake;
 
-public class ShooterIntakeSubsystem extends SubsystemBase{
-    
-    private CANSparkMax top = new CANSparkMax(operatorStuff.kTop_ID, MotorType.kBrushless);
-    private CANSparkMax bot = new CANSparkMax(operatorStuff.kBot_ID, MotorType.kBrushless);
-    private CANSparkMax intake = new CANSparkMax(operatorStuff.kIntake_ID, MotorType.kBrushless);
+    private static ShooterIntakeSubsystem m_shooterInstance = null;
 
-  public ShooterIntakeSubsystem(){}
 
- 
+    public ShooterIntakeSubsystem(int topID, int botID, int intakeID){
+      top = new CANSparkMax(topID, MotorType.kBrushless);
+      bot = new CANSparkMax(botID, MotorType.kBrushless);
+      intake = new CANSparkMax(intakeID, MotorType.kBrushless);
+  }
+  
     //bring it in --> backup 
     public Command keepIn(){
       return this.startEnd(
@@ -67,10 +74,6 @@ public class ShooterIntakeSubsystem extends SubsystemBase{
           stop();
         });
     }
-
-
-  
-    //intake
     public Command intaking(){
       return this.startEnd(
         // When the command is initialized, set the wheels to the intake speed values
@@ -93,11 +96,19 @@ public class ShooterIntakeSubsystem extends SubsystemBase{
    public void setWheels(double speed){
     top.set(speed);
     bot.set(speed);
+    SmartDashboard.putNumber("Shooter speed", speed);
    }
    
    public void setIntake(double speed){
     intake.set(speed);
+    SmartDashboard.putNumber("Intake speed", speed);
    }
 
-   
+   public static ShooterIntakeSubsystem getInstance() {
+    if (m_shooterInstance == null) {
+        m_shooterInstance = new ShooterIntakeSubsystem(Constants.operatorStuff.kTop_ID, Constants.operatorStuff.kBot_ID, Constants.operatorStuff.kIntake_ID);
+    }
+
+    return m_shooterInstance;
+}
 }
