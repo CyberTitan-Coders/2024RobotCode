@@ -1,5 +1,5 @@
 package frc.robot.commands;
 
-public class ArmCommands {
+public class SetArmAngle {
     
 }

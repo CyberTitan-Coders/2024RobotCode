@@ -5,17 +5,17 @@
 package frc.robot;
 
 //subsystem imports
-import frc.robot.subsystems.ShooterIntakeSubsystem;
-//import frc.robot.subsystems.ArmSubsystemPID;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-//import frc.robot.Constants.ArmConstants;
-//import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ArmSubsystemPID;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.operatorStuff;
+import frc.robot.commands.SetIntakeSpeed;
 // import frc.robot.Constants.AutoConstants;
 // import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.ShooterIntakeCommands;
-
+import frc.robot.commands.SetShooterSpeed;
 // import edu.wpi.first.wpilibj.Joystick.AxisType;
 // import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -57,12 +57,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer{
   // Subsystem initialization 
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ShooterIntakeSubsystem shooter = ShooterIntakeSubsystem.getInstance();
-
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
   //private final ShooterIntakeSubsystem m_shootingOrIntaking = new ShooterIntakeSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
-  //private final ArmSubsystemPID m_armPID = new ArmSubsystemPID();
-  private final ArmSubsystem m_arm = ArmSubsystem.getInstance();
+  private final ArmSubsystemPID m_arm = new ArmSubsystemPID();
 
   // XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -74,9 +73,7 @@ public class RobotContainer{
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Register Named Commands used for PathPlanner 
-    NamedCommands.registerCommand("Shoot", ShooterIntakeCommands.shoot()); 
-    NamedCommands.registerCommand("Note Pickup", getAutonomousCommand());
+    // Register Named Commands Path planner 
 
 
     // Configure the button bindings
@@ -95,12 +92,12 @@ public class RobotContainer{
                 true, false), // was true for ratelimit
             m_robotDrive));
 
-    //  m_arm.setDefaultCommand(
-    //   // Operator: left joystick arm control  
-    //     new RunCommand(       
-    //       () -> m_arm.set(-operatorStuff.kArmSpeed*
-    //           MathUtil.applyDeadband(m_operatorController.getLeftY(),
-    //           ArmConstants.kArmDeadband)),m_arm));
+            m_arm.setDefaultCommand(
+            // Operator: left joystick arm control  
+                new RunCommand(       
+                () -> m_arm.set(-operatorStuff.kArmSpeed*
+                    MathUtil.applyDeadband(m_operatorController.getLeftY(),
+                    ArmConstants.kArmDeadband)),m_arm));
 
   
             autoChooser = AutoBuilder.buildAutoChooser();
@@ -125,14 +122,22 @@ public class RobotContainer{
      * Start Button: shooter set up 
      * Back Button: amp set up 
      */
-        m_operatorController.x().whileTrue(shooter.shooterOut());
-        m_operatorController.y().whileTrue(shooter.shooterIn()); 
-        m_operatorController.a().whileTrue(shooter.intaking());
-        m_operatorController.b().whileTrue(shooter.keepIn());
+        // m_operatorController.x().whileTrue(m_shooter.shooterOut());
+        // m_operatorController.y().whileTrue(m_shooter.shooterIn()); 
+        // m_operatorController.a().whileTrue(m_shooter.intaking());
+        // m_operatorController.b().whileTrue(m_shooter.keepIn());
 
-        // Move the arm to 2 radians above horizontal when the 'A' button is pressed.
+        m_operatorController.x()
+        .whileTrue(new SetShooterSpeed(m_shooter, 0.65))
+        .whileFalse(new SetShooterSpeed(m_shooter, 0));
 
+        m_operatorController.y()
+        .whileTrue(new SetShooterSpeed(m_shooter, -0.65))
+        .whileFalse(new SetShooterSpeed(m_shooter, 0));
 
+        m_operatorController.a()
+        .whileTrue(new SetIntakeSpeed(m_intake, 1))
+        .whileFalse(new SetIntakeSpeed(m_intake, 0));
 
         // m_operatorController.start().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30))); // --> change the radian 
         // m_operatorController.back().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30)));
@@ -209,4 +214,12 @@ public class RobotContainer{
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
     */
   } 
+
+
+  public void reigsterNamedCommands(){
+    NamedCommands.registerCommand("Shooter On", new SetShooterSpeed(m_shooter, 0.65));
+    NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0));
+    NamedCommands.registerCommand("Intake On ", new SetIntakeSpeed(m_intake, 1));
+    NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
+  }
 }

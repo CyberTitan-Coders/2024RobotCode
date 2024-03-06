@@ -12,38 +12,20 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 public class IntakeSubsystem {
 
-    public static CANSparkMax m_intake; 
-    private static IntakeSubsystem m_Instance = null;
+    public static CANSparkMax m_intake = new CANSparkMax(operatorStuff.kIntake_ID, MotorType.kBrushless);
 
-    public IntakeSubsystem(int intakeID){
-        m_intake = new CANSparkMax(intakeID, MotorType.kBrushless);
+    public IntakeSubsystem(){
         m_intake.setIdleMode(IdleMode.kBrake);
     }
 
-
     
-
-    public void setIntake(double speed){
+    public void setIntakeSpeed(double speed){
         m_intake.set(speed);
         SmartDashboard.putNumber("Intake speed", speed);
        }
 
-    public void stopIntake(){
+       public void stopIntake(){
         m_intake.set(0);
-        SmartDashboard.putNumber("Stop intake", 0);
-    }
-
-    public void noteIn(){
-        // jeanelle please write this 
-        // run intake motor until the note is detected and stop motors 
-        // probably use ultrasonic sensor -- need to figure out where to put it on robot 
-    }
-
-    public static IntakeSubsystem getInstance(){
-        if(m_Instance == null){
-            m_Instance = new IntakeSubsystem(operatorStuff.kIntake_ID);
-        }
-        return m_Instance; 
-    }
-    
+        SmartDashboard.putNumber("Intake has been stopped", 0);
+       }
 }
