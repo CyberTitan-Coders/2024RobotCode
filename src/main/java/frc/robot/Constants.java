@@ -98,16 +98,18 @@ public final class Constants {
     public static final int kArmLeft_ID=32;
     public static final int kArmRight_ID=34;
 
-    public static final double kShootingSpeed=.9;
-    public static final double kIntakeToShootingSpeed=.9;
-
 
     public static final double kKeepNoteInSpeed=0.20;
 
-    public static final double kIntakeSpeed=.45;
     public static final double kArmSpeed=.30;
     public static final double kClimberSpeed=.20;
     public static final double kIdleSpeed=0;
+  }
+
+  public static final class IntakeShooter{
+    public static final double kShootingSpeed=.9;
+    public static final double kIntakeToShootingSpeed=.9;
+    public static final double kIntakeSpeed=.45;
   }
 
   public static final class Swerve {
@@ -201,7 +203,6 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    // generic: p = 0.4
     public static final double kDrivingP = 0.4;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
@@ -209,7 +210,6 @@ public final class Constants {
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    // generic: p = 1.0
     public static final double kTurningP = 1;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0;
