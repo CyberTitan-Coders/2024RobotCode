@@ -10,6 +10,7 @@ public class SetIntakeSpeed extends InstantCommand{
     public SetIntakeSpeed(IntakeSubsystem intake, double speed){
         m_intake = intake; 
         m_speed = speed; 
+        addRequirements(m_intake);
     }
 
     public void initialize(){

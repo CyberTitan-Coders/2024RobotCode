@@ -10,6 +10,7 @@ public class SetShooterSpeed extends InstantCommand{
     public SetShooterSpeed(ShooterSubsystem shooter, double speed){
         m_shooter = shooter; 
         m_speed = speed; 
+        addRequirements(m_shooter);
     }
 
     public void initialize(){

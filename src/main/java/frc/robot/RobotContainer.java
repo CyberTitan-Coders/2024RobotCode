@@ -74,10 +74,11 @@ public class RobotContainer{
    */
   public RobotContainer() {
     // Register Named Commands Path planner 
-
+    registerNamedCommands();
 
     // Configure the button bindings
     configureButtonBindings();
+
      m_robotDrive.setCoast();
 
     // Configure default commands
@@ -154,6 +155,8 @@ public class RobotContainer{
      * Left Trigger: climb down (left)
      * Right Bumper: climb down (right)
      * Left Bumper: climb down (left)
+     * : brake mode 
+     * : coast mode 
      */
          m_driverController.rightTrigger().whileTrue(m_climber.climbDownRight());
          m_driverController.leftTrigger().whileTrue(m_climber.climbDownLeft());
@@ -216,7 +219,7 @@ public class RobotContainer{
   } 
 
 
-  public void reigsterNamedCommands(){
+  public void registerNamedCommands(){
     NamedCommands.registerCommand("Shooter On", new SetShooterSpeed(m_shooter, 0.65));
     NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0));
     NamedCommands.registerCommand("Intake On ", new SetIntakeSpeed(m_intake, 1));
