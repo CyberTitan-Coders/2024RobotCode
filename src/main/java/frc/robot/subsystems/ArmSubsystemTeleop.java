@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 // import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.subsystems.ArmSubsystem;
 // https://software-metadata.revrobotics.com/REVLib-2024.json
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;

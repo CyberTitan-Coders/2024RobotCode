@@ -107,7 +107,7 @@ public final class Constants {
   }
 
   public static final class IntakeShooter{
-    public static final double kShootingSpeed=.9;
+    public static final double kShootingSpeed=.75;
     public static final double kIntakeToShootingSpeed=.9;
     public static final double kIntakeSpeed=.45;
   }

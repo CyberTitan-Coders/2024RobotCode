@@ -10,19 +10,23 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystemPID;
+import frc.robot.Constants.IntakeShooter; 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
+
 import frc.robot.commands.SetIntakeSpeed;
-// import frc.robot.Constants.AutoConstants;
-// import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.SetShooterSpeed;
-// import edu.wpi.first.wpilibj.Joystick.AxisType;
-// import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import  edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
+// import frc.robot.Constants.AutoConstants;
+// import frc.robot.Constants.DriveConstants;
+// import edu.wpi.first.wpilibj.Joystick.AxisType;
+// import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+
 // import edu.wpi.first.math.controller.PIDController;
 // import edu.wpi.first.math.controller.ProfiledPIDController;
 // import edu.wpi.first.math.geometry.Pose2d;
@@ -59,7 +63,6 @@ public class RobotContainer{
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  //private final ShooterIntakeSubsystem m_shootingOrIntaking = new ShooterIntakeSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
   private final ArmSubsystemPID m_arm = new ArmSubsystemPID();
 
@@ -78,7 +81,6 @@ public class RobotContainer{
 
     // Configure the button bindings
     configureButtonBindings();
-
      m_robotDrive.setCoast();
 
     // Configure default commands
@@ -123,21 +125,20 @@ public class RobotContainer{
      * Start Button: shooter set up 
      * Back Button: amp set up 
      */
-        // m_operatorController.x().whileTrue(m_shooter.shooterOut());
-        // m_operatorController.y().whileTrue(m_shooter.shooterIn()); 
-        // m_operatorController.a().whileTrue(m_shooter.intaking());
-        // m_operatorController.b().whileTrue(m_shooter.keepIn());
-
         m_operatorController.x()
-        .whileTrue(new SetShooterSpeed(m_shooter, 0.65))
+        .whileTrue(new SetShooterSpeed(m_shooter, IntakeShooter.kShootingSpeed))
         .whileFalse(new SetShooterSpeed(m_shooter, 0));
 
         m_operatorController.y()
-        .whileTrue(new SetShooterSpeed(m_shooter, -0.65))
+        .whileTrue(new SetShooterSpeed(m_shooter, -(IntakeShooter.kShootingSpeed)))
         .whileFalse(new SetShooterSpeed(m_shooter, 0));
 
         m_operatorController.a()
-        .whileTrue(new SetIntakeSpeed(m_intake, 1))
+        .whileTrue(new SetIntakeSpeed(m_intake, IntakeShooter.kIntakeSpeed))
+        .whileFalse(new SetIntakeSpeed(m_intake, 0));
+
+        m_operatorController.b()
+        .whileTrue(new SetIntakeSpeed(m_intake, -(IntakeShooter.kIntakeSpeed)))
         .whileFalse(new SetIntakeSpeed(m_intake, 0));
 
         // m_operatorController.start().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30))); // --> change the radian 
@@ -158,7 +159,8 @@ public class RobotContainer{
      * : brake mode 
      * : coast mode 
      */
-         m_driverController.rightTrigger().whileTrue(m_climber.climbDownRight());
+         m_driverController.rightTrigger().
+         whileTrue(m_climber.climbDownRight());
          m_driverController.leftTrigger().whileTrue(m_climber.climbDownLeft());
          m_driverController.rightBumper().whileTrue(m_climber.climbUpRight());
          m_driverController.leftBumper().whileTrue(m_climber.climbUpLeft());
@@ -220,9 +222,9 @@ public class RobotContainer{
 
 
   public void registerNamedCommands(){
-    NamedCommands.registerCommand("Shooter On", new SetShooterSpeed(m_shooter, 0.65));
+    NamedCommands.registerCommand("Shooter On", new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kShootingSpeed));
     NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0));
-    NamedCommands.registerCommand("Intake On ", new SetIntakeSpeed(m_intake, 1));
+    NamedCommands.registerCommand("Intake On ", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
   }
 }
