@@ -87,16 +87,16 @@ public final class Constants {
 
   public static final class operatorStuff{
 
-    public static final int kTop_ID=35;
-    public static final int kBot_ID=36;
+    public static final int kTop_ID=41;
+    public static final int kBot_ID=42;
 
-    public static final int kIntake_ID=33;
+    public static final int kIntake_ID=43;
 
-    public static final int kClimberLeft_ID=31;
-    public static final int kClimberRight_ID=0;
+    public static final int kClimberLeft_ID=46;
+    public static final int kClimberRight_ID=47;
 
-    public static final int kArmLeft_ID=32;
-    public static final int kArmRight_ID=34;
+    public static final int kArmLeft_ID=44;
+    public static final int kArmRight_ID=45;
 
 
     public static final double kKeepNoteInSpeed=0.20;
