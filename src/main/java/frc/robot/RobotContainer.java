@@ -123,7 +123,9 @@ public class RobotContainer{
     /*
      * Start Button: 
      * A Button: intake in
-     * B Button: intake out 
+     * B Button: intake reverse  
+     * X Button: shoot out 
+     * Y Button: shoot reverse 
      * Start Button: shooter set up 
      */
         m_operatorController.x()
