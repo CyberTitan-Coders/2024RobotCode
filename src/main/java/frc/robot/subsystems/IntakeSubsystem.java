@@ -41,8 +41,8 @@ public class IntakeSubsystem extends SubsystemBase{
        }
 
        public void detectSensor(){
-
-        if(m_sensor.getRangeInches() < 0.05){
+        double sensValue = m_sensor.getRangeInches();
+        if(sensValue < 0.05){
             m_intake.set(0);
             isSensor = true;
         }
@@ -51,7 +51,8 @@ public class IntakeSubsystem extends SubsystemBase{
             isSensor = false; 
        }
 
-       public void SensorDasboard(){
+       public void periodic(){
+        detectSensor();
         SmartDashboard.putNumber("Sensor reading", getSensor());
         SmartDashboard.putBoolean("Note status", isSensor);
         }

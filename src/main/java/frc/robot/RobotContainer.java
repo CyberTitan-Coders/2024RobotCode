@@ -13,7 +13,8 @@ import frc.robot.subsystems.ArmSubsystemPID;
 import frc.robot.Constants.IntakeShooter; 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
-
+import frc.robot.commands.DetectNote;
+import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.SetIntakeSpeed;
 import frc.robot.commands.SetShooterSpeed;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +38,7 @@ import edu.wpi.first.math.util.Units;
 // import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.desiredEncoderValue;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -123,7 +125,6 @@ public class RobotContainer{
      * A Button: intake in
      * B Button: intake out 
      * Start Button: shooter set up 
-     * Back Button: amp set up 
      */
         m_operatorController.x()
         .whileTrue(new SetShooterSpeed(m_shooter, IntakeShooter.kShootingSpeed))
@@ -141,6 +142,12 @@ public class RobotContainer{
         .whileTrue(new SetIntakeSpeed(m_intake, -(IntakeShooter.kIntakeSpeed)))
         .whileFalse(new SetIntakeSpeed(m_intake, 0));
 
+        m_operatorController.start()
+        .whileTrue(new SetArmAngle(m_arm, desiredEncoderValue.kSpeakerArmAngle));
+
+        m_operatorController.back()
+        .whileTrue(new SetArmAngle(m_arm, desiredEncoderValue.kIntakeArmAngle));
+
         // m_operatorController.start().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30))); // --> change the radian 
         // m_operatorController.back().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30)));
 
@@ -156,8 +163,6 @@ public class RobotContainer{
      * Left Trigger: climb down (left)
      * Right Bumper: climb down (right)
      * Left Bumper: climb down (left)
-     * : brake mode 
-     * : coast mode 
      */
          m_driverController.rightTrigger().
          whileTrue(m_climber.climbDownRight());
@@ -226,5 +231,8 @@ public class RobotContainer{
     NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0));
     NamedCommands.registerCommand("Intake On ", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
+    NamedCommands.registerCommand("Arm Speaker", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
+    NamedCommands.registerCommand("Arm Intake", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kIntakeArmAngle));
+    NamedCommands.registerCommand("Sensor Detect Stop", new DetectNote(m_intake));
   }
 }
