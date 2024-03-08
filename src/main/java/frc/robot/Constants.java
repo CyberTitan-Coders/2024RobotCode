@@ -31,6 +31,10 @@ import com.pathplanner.lib.util.ReplanningConfig;
  */
 public final class Constants {
 
+    public static final class VisionConstants{
+      
+    }
+
     public static final class desiredEncoderValue {
     public static final double kSpeakerArmAngle=0;
     public static final double kAmpArmAngle=0;
@@ -83,6 +87,10 @@ public final class Constants {
     //public static final double kMaxArmSpeed = 0.2; 
     public static final double kArmSlewRate = 2;
     public static final double kArmDeadband = 0.1;
+  }
+
+  public static final class ClimberConstants{
+    public static final double kClimberSpeed = 0.5; 
   }
 
   public static final class operatorStuff{

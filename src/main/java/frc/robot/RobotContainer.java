@@ -13,6 +13,7 @@ import frc.robot.subsystems.ArmSubsystemPID;
 import frc.robot.Constants.IntakeShooter; 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.commands.DetectNote;
 import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.SetIntakeSpeed;

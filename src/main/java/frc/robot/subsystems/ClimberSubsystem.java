@@ -113,9 +113,11 @@ public Command climbUpLeft(){
       m_rightClimber.set(-(speed));
 
     }
+
     public void setLeftClimber(double speed){
         m_leftClimber.set(speed);
     }
+    
     public void stop(){
     m_leftClimber.set(0);
     m_rightClimber.set(0);
