@@ -67,7 +67,8 @@ public final class Constants {
     public static final double kArmEncoderPositionPIDMinInput = kArmOffsetRads; // radians
     public static final double kArmEncoderPositionPIDMaxInput = (1.5 * Math.PI); // Guess 
     public static final int kArmMotorCurrentLimit = 40; // amps
-    // CHANGE 
+    
+    // Need to calculate these 
     public static final double kP = 0.78697; //10000x
     public static final double kPVel = 5.534E-11;
     public static final double kI = 0;

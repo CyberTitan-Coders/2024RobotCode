@@ -11,41 +11,24 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
 
-
-// https://software-metadata.revrobotics.com/REVLib-2024.json
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-//import com.revrobotics.SparkAbsoluteEncoder.Type;
-
-
-import java.util.function.DoubleSupplier;
-
 
 import com.revrobotics.CANSparkBase.ControlType;
-//import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-
-//import edu.wpi.first.wpilibj.ADXRS450_Gyro; // small FRC gyro in SPI slot
-// https://dev.studica.com/releases/2024/NavX.json
-
-
-//import edu.wpi.first.wpilibj.SPI;
-//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 
-
-
-public class ArmSubsystemPID extends TrapezoidProfileSubsystem{
+public class ArmSubsystem extends TrapezoidProfileSubsystem{
     private CANSparkMax m_leftArm = new CANSparkMax(operatorStuff.kArmLeft_ID, MotorType.kBrushless);
     private CANSparkMax m_rightArm = new CANSparkMax(operatorStuff.kArmRight_ID, MotorType.kBrushless);
    
-    private final RelativeEncoder m_leftArmEncoder;
-    private final RelativeEncoder m_rightArmEncoder;
+    private final AbsoluteEncoder m_leftArmEncoder;
+    private final AbsoluteEncoder m_rightArmEncoder;
     private final SparkPIDController m_pid;
 
 
@@ -55,25 +38,24 @@ public class ArmSubsystemPID extends TrapezoidProfileSubsystem{
     private final SlewRateLimiter m_armSlew = new SlewRateLimiter(ArmConstants.kArmSlewRate); // add arm slew rate to constants file
 
 
-    public ArmSubsystemPID() {
+    public ArmSubsystem() {
     super(
         new TrapezoidProfile.Constraints(
             ArmConstants.kMaxVelocityRadPerSecond,
             ArmConstants.kMaxAccelerationRadPerSecSquared),
             ArmConstants.kArmOffsetRads);
 
-
       m_leftArm.restoreFactoryDefaults();
       m_rightArm.restoreFactoryDefaults();
 
-
       // Setup the encoder and pid controller
-      m_leftArmEncoder = m_leftArm.getEncoder();
-      m_rightArmEncoder = m_rightArm.getEncoder();
-      m_leftArmEncoder.setPosition(ArmConstants.kArmOffsetRads);
-      m_rightArmEncoder.setPosition(ArmConstants.kArmOffsetRads);
+      m_leftArmEncoder = m_leftArm.getAbsoluteEncoder();
+      m_rightArmEncoder = m_rightArm.getAbsoluteEncoder();
+
       m_leftArmEncoder.setPositionConversionFactor(ArmConstants.kArmEncoderPositionFactor);
       m_rightArmEncoder.setPositionConversionFactor(ArmConstants.kArmEncoderPositionFactor);
+      m_leftArmEncoder.setZeroOffset(ArmConstants.kArmOffsetRads);
+      m_rightArmEncoder.setZeroOffset(ArmConstants.kArmOffsetRads);
       m_leftArmEncoder.setVelocityConversionFactor(ArmConstants.kArmEncoderVelocityFactor);
       m_rightArmEncoder.setVelocityConversionFactor(ArmConstants.kArmEncoderVelocityFactor);
 
@@ -98,7 +80,6 @@ public class ArmSubsystemPID extends TrapezoidProfileSubsystem{
       m_rightArm.burnFlash();
     }
 
-
     public void stop(){
       m_leftArm.set(0);
       m_rightArm.set(0);
@@ -108,7 +89,6 @@ public class ArmSubsystemPID extends TrapezoidProfileSubsystem{
       super.setGoal(m_goal);
       super.periodic();
 
-
       SmartDashboard.getNumber("left arm encoder", m_leftArmEncoder.getPosition());
       SmartDashboard.getNumber("right arm encoder", m_rightArmEncoder.getPosition());
       SmartDashboard.getNumber("current arm position", m_leftArmEncoder.getPosition());
@@ -116,7 +96,7 @@ public class ArmSubsystemPID extends TrapezoidProfileSubsystem{
 
 
     // Arm PID controls
-    public void useState(TrapezoidProfile.State setpoint) {
+      public void useState(TrapezoidProfile.State setpoint) {
       // Calculate the feedforward from the sepoint
       double feedforward = m_feedforward.calculate(setpoint.position,setpoint.velocity);
      
@@ -135,48 +115,24 @@ public class ArmSubsystemPID extends TrapezoidProfileSubsystem{
     }
 
 
-// public CommandBase manualArmOrHold(double speed) {
-//   return Commands.either(setArmGoalCommand(getPositionRadians()).withName("auto arm"),
-//                  Commands.run(()->set(speed)).withName("manual arm"),
-//                  ()->(Math.abs(speed) < ArmConstants.kArmDeadband));
-// }
+    public double getPositionRadians() {
+      return m_leftArmEncoder.getPosition(); // + ArmConstants.kArmOffsetRads;
+    }
 
 
-public double getPositionRadians() {
-  return m_leftArmEncoder.getPosition(); // + ArmConstants.kArmOffsetRads;
-}
+    public double getArmGoal() {
+      return m_goal;
+    }
 
 
-public Command setArmManual(DoubleSupplier speed) {
-  return Commands.run(()->setArmGoal(getArmGoal()+speed.getAsDouble()/(2*Math.PI)),this);
-}
+    public void setArmGoal(double goal) {
+      m_goal = MathUtil.clamp(goal,ArmConstants.kArmOffsetRads-0.1,ArmConstants.kArmMaxRads+0.1);
+    }
 
 
-public double getArmGoal() {
-  return m_goal;
-}
+    public void setEncoderPosition(double position) {
+      m_leftArmEncoder.setZeroOffset(position);
+    }
 
 
-public void setArmGoal(double goal) {
-  m_goal = MathUtil.clamp(goal,ArmConstants.kArmOffsetRads-0.1,ArmConstants.kArmMaxRads+0.1);
-}
-
-
-public void resetDownPosition() {
-  m_leftArmEncoder.setPosition(ArmConstants.kArmOffsetRads);
-  m_goal = ArmConstants.kArmOffsetRads;
-}
-
-
-public void resetUpPosition() {
-  m_leftArmEncoder.setPosition(ArmConstants.kArmMaxRads);
-  m_goal = ArmConstants.kArmMaxRads;
-}
-
-
-public void setEncoderPosition(double position) {
-  m_leftArmEncoder.setPosition(position);
-}
-
-
-}
+    }

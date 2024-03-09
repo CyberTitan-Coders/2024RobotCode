@@ -9,11 +9,11 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ArmSubsystemPID;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.Constants.IntakeShooter; 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
-import frc.robot.Constants.ClimberConstants;
+//import frc.robot.Constants.ClimberConstants;
 import frc.robot.commands.DetectNote;
 import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.SetIntakeSpeed;
@@ -27,7 +27,6 @@ import  edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 // import edu.wpi.first.wpilibj.Joystick.AxisType;
 // import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
 
 // import edu.wpi.first.math.controller.PIDController;
 // import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -40,8 +39,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.desiredEncoderValue;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+// import edu.wpi.first.wpilibj2.command.Subsystem;
+// import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 //import edu.wpi.first.wpilibj2.command.button.POVButton;
 
@@ -67,7 +66,7 @@ public class RobotContainer{
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
-  private final ArmSubsystemPID m_arm = new ArmSubsystemPID();
+  private final ArmSubsystem m_arm = new ArmSubsystem();
 
   // XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
