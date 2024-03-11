@@ -40,6 +40,14 @@ public class ShooterSubsystem extends SubsystemBase{
         m_bottomShooter.set(speed);
     }
 
+    public void setTopShooterSpeed(double speed){
+        m_topShooter.set(speed);
+    }
+
+    public void setBottomShooterSpeed(double speed){
+        m_bottomShooter.set(speed);
+    }
+
     public void stopShoot(){
         m_topShooter.set(0);
         m_bottomShooter.set(0);

@@ -26,8 +26,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 public class ArmSubsystem extends TrapezoidProfileSubsystem{
     private CANSparkMax m_leftArm = new CANSparkMax(operatorStuff.kArmLeft_ID, MotorType.kBrushless);
     private CANSparkMax m_rightArm = new CANSparkMax(operatorStuff.kArmRight_ID, MotorType.kBrushless);
-   
-    private final AbsoluteEncoder m_leftArmEncoder;
+  
+
     private final AbsoluteEncoder m_rightArmEncoder;
     private final SparkPIDController m_pid;
 
@@ -49,20 +49,16 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem{
       m_rightArm.restoreFactoryDefaults();
 
       // Setup the encoder and pid controller
-      m_leftArmEncoder = m_leftArm.getAbsoluteEncoder();
       m_rightArmEncoder = m_rightArm.getAbsoluteEncoder();
 
-      m_leftArmEncoder.setPositionConversionFactor(ArmConstants.kArmEncoderPositionFactor);
       m_rightArmEncoder.setPositionConversionFactor(ArmConstants.kArmEncoderPositionFactor);
-      m_leftArmEncoder.setZeroOffset(ArmConstants.kArmOffsetRads);
       m_rightArmEncoder.setZeroOffset(ArmConstants.kArmOffsetRads);
-      m_leftArmEncoder.setVelocityConversionFactor(ArmConstants.kArmEncoderVelocityFactor);
       m_rightArmEncoder.setVelocityConversionFactor(ArmConstants.kArmEncoderVelocityFactor);
 
 
       // just need to read the left arm for pid, but theoretically they should be reading the same values
-      m_pid = m_leftArm.getPIDController();
-      m_pid.setFeedbackDevice(m_leftArmEncoder);
+      m_pid = m_rightArm.getPIDController();
+      m_pid.setFeedbackDevice(m_rightArmEncoder);
 
 
       m_pid.setP(ArmConstants.kP);
@@ -89,9 +85,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem{
       super.setGoal(m_goal);
       super.periodic();
 
-      SmartDashboard.getNumber("left arm encoder", m_leftArmEncoder.getPosition());
-      SmartDashboard.getNumber("right arm encoder", m_rightArmEncoder.getPosition());
-      SmartDashboard.getNumber("current arm position", m_leftArmEncoder.getPosition());
+      SmartDashboard.getNumber("current arm position", m_rightArmEncoder.getPosition());
     }
 
 
@@ -116,7 +110,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem{
 
 
     public double getPositionRadians() {
-      return m_leftArmEncoder.getPosition(); // + ArmConstants.kArmOffsetRads;
+      return m_rightArmEncoder.getPosition(); // + ArmConstants.kArmOffsetRads;
     }
 
 
@@ -131,8 +125,6 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem{
 
 
     public void setEncoderPosition(double position) {
-      m_leftArmEncoder.setZeroOffset(position);
+      m_rightArmEncoder.setZeroOffset(position);
     }
-
-
-    }
+  }

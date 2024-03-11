@@ -6,7 +6,7 @@ package frc.robot;
 
 //subsystem imports
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
+//import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
@@ -14,7 +14,7 @@ import frc.robot.Constants.IntakeShooter;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
 //import frc.robot.Constants.ClimberConstants;
-import frc.robot.commands.DetectNote;
+//import frc.robot.commands.DetectNote;
 import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.SetIntakeSpeed;
 import frc.robot.commands.SetShooterSpeed;
@@ -46,7 +46,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
+//import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -65,7 +65,7 @@ public class RobotContainer{
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  private final ClimberSubsystem m_climber = new ClimberSubsystem();
+  //private final ClimberSubsystem m_climber = new ClimberSubsystem();
   private final ArmSubsystem m_arm = new ArmSubsystem();
 
   // XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -128,13 +128,13 @@ public class RobotContainer{
      * Y Button: shoot reverse 
      * Start Button: shooter set up 
      */
-        m_operatorController.x()
-        .whileTrue(new SetShooterSpeed(m_shooter, IntakeShooter.kShootingSpeed))
-        .whileFalse(new SetShooterSpeed(m_shooter, 0));
+        // m_operatorController.x()
+        // .whileTrue(new SetShooterSpeed(m_shooter, IntakeShooter.kShootingSpeed))
+        // .whileFalse(new SetShooterSpeed(m_shooter, 0));
 
-        m_operatorController.y()
-        .whileTrue(new SetShooterSpeed(m_shooter, -(IntakeShooter.kShootingSpeed)))
-        .whileFalse(new SetShooterSpeed(m_shooter, 0));
+        // m_operatorController.y()
+        // .whileTrue(new SetShooterSpeed(m_shooter, -(IntakeShooter.kShootingSpeed)))
+        // .whileFalse(new SetShooterSpeed(m_shooter, 0));
 
         m_operatorController.a()
         .whileTrue(new SetIntakeSpeed(m_intake, IntakeShooter.kIntakeSpeed))
@@ -166,11 +166,11 @@ public class RobotContainer{
      * Right Bumper: climb down (right)
      * Left Bumper: climb down (left)
      */
-         m_driverController.rightTrigger().
-         whileTrue(m_climber.climbDownRight());
-         m_driverController.leftTrigger().whileTrue(m_climber.climbDownLeft());
-         m_driverController.rightBumper().whileTrue(m_climber.climbUpRight());
-         m_driverController.leftBumper().whileTrue(m_climber.climbUpLeft());
+        //  m_driverController.rightTrigger().
+        //  whileTrue(m_climber.climbDownRight());
+        //  m_driverController.leftTrigger().whileTrue(m_climber.climbDownLeft());
+        //  m_driverController.rightBumper().whileTrue(m_climber.climbUpRight());
+        //  m_driverController.leftBumper().whileTrue(m_climber.climbUpLeft());
   }
 
   /**
@@ -229,12 +229,12 @@ public class RobotContainer{
 
 
   public void registerNamedCommands(){
-    NamedCommands.registerCommand("Shooter On", new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kShootingSpeed));
-    NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0));
-    NamedCommands.registerCommand("Intake On ", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
+    NamedCommands.registerCommand("Shooter On", new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kTopShootSpeed, Constants.IntakeShooter.kBottomShootSpeed));
+    NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0, 0));
+    NamedCommands.registerCommand("Intake On", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
     NamedCommands.registerCommand("Arm Speaker", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
     NamedCommands.registerCommand("Arm Intake", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kIntakeArmAngle));
-    NamedCommands.registerCommand("Sensor Detect Stop", new DetectNote(m_intake));
+    //NamedCommands.registerCommand("Sensor Detect Stop", new DetectNote(m_intake));
   }
 }
