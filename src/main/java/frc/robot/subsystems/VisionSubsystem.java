@@ -27,3 +27,5 @@
 //     }
     
 // }
+
+// USE METHOD 2 FOR CAMERA 

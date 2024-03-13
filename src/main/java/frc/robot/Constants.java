@@ -36,9 +36,9 @@ public final class Constants {
     }
 
     public static final class desiredEncoderValue {
-    public static final double kSpeakerArmAngle=0;
+    public static final double kSpeakerArmAngle=4.14;
     public static final double kAmpArmAngle=0;
-    public static final double kIntakeArmAngle=0;
+    public static final double kIntakeArmAngle=3.9;
 
     public static final double kClimberPositionTop=0;
     public static final double kClimberPositionBottom=0;
@@ -52,14 +52,14 @@ public final class Constants {
     public static final double kArmGearRatio = 211.909; 
 
     // SysID values (in radians and radians/sec)
-    public static final double kSVolts = 0.11356;
-    public static final double kGVolts = 0.29175;
-    public static final double kVVoltSecondPerRad = 1.5928;
-    public static final double kAVoltSecondSquaredPerRad = 0.030171;
-    public static final double kMaxVelocityRadPerSecond = 5;
-    public static final double kMaxAccelerationRadPerSecSquared = 8;
+    public static final double kSVolts = 0.11356; // !!change this 
+    public static final double kGVolts =  0.06;//0.29175;
+    public static final double kVVoltSecondPerRad = 4.13;//1.5928;
+    public static final double kAVoltSecondSquaredPerRad = 0.04;//0.030171;
+    public static final double kMaxVelocityRadPerSecond = 5; // !!change this
+    public static final double kMaxAccelerationRadPerSecSquared = 8; // !!change this 
     public static final double kArmOffsetRads = Units.degreesToRadians(0); //Starting angle 
-    public static final double kArmMaxRads = Units.degreesToRadians(0); //Ending angle
+    public static final double kArmMaxRads = Units.degreesToRadians(90); //Ending angle
 
     public static final double kArmEncoderPositionFactor = ((2 * Math.PI) / kArmGearRatio); // radians
     public static final double kArmEncoderVelocityFactor = ((2 * Math.PI) / kArmGearRatio) / 60.0; // radians per second
@@ -110,15 +110,17 @@ public final class Constants {
 
     public static final double kKeepNoteInSpeed=0.20;
 
-    public static final double kArmSpeed=.30;
+    public static final double kArmSpeed=.25;
+    // increase test --> eventually will be used for auto values 
+    public static final double kArmSpeedTest = 0.1; 
     public static final double kClimberSpeed=.20;
     public static final double kIdleSpeed=0;
   }
 
   public static final class IntakeShooter{
     public static final double kShootingSpeed=.75;
-    public static final double kTopShootSpeed = .85;
-    public static final double kBottomShootSpeed = .85; 
+    public static final double kTopShootSpeed = .65;
+    public static final double kBottomShootSpeed = .65; 
     public static final double kIntakeToShootingSpeed=.75;
     public static final double kIntakeSpeed=.4;
   }
@@ -132,7 +134,7 @@ public final class Constants {
     public static final Translation2d frModule = new Translation2d(kWheelBase / 2, -kTrackWidth / 2);
     public static final Translation2d blModule = new Translation2d(-kWheelBase / 2, kTrackWidth / 2);
     public static final Translation2d brModule = new Translation2d(-kWheelBase / 2, -kTrackWidth / 2);
-    public static final double kMaxSpeedMetersPerSecond = 4.8;  //was 4.8 tested with 0.8
+    public static final double kMaxSpeedMetersPerSecond = 5;  //was 4.8 changed to 5 -- may slowly increment 
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(1.0,0,0),
       new PIDConstants(1.0,0,0),
@@ -213,14 +215,14 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = .3;
+    public static final double kDrivingP = 0.04;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = .4;
+    public static final double kTurningP = 1.0;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0;
     public static final double kTurningFF = 0;

@@ -4,16 +4,16 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class SetArmAngle extends InstantCommand{
     private final ArmSubsystem m_arm; 
-    private final double m_goal; 
+    private final double m_targetAngle; 
     
-    public SetArmAngle(ArmSubsystem arm, double goal){
+    public SetArmAngle(ArmSubsystem arm, double targetAngle){
       m_arm = arm;
-      m_goal = goal;
+      m_targetAngle = targetAngle;
       addRequirements(m_arm);
 
     }
 
     public void initialize(){
-        m_arm.setArmGoalCommand(m_goal);
+        m_arm.setShooterAngle(m_targetAngle);
     }
 }

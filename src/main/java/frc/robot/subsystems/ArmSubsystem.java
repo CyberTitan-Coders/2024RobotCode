@@ -1,130 +1,136 @@
-// TrapezoidalPrfile subsystem modified based on Team 1108 Template
-//https://github.com/frc1108/Robot2023/blob/12fe3c9d7fb5bbf415d46095e169d892660d4aa7/src/main/java/frc/robot/subsystems/ArmSubsystem.java#L111C1-L120C2
-
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.TrapezoidProfileSubsystem;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.operatorStuff;
 
+// import edu.wpi.first.wpilibj.TimedRobot;
+// import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
+// https://software-metadata.revrobotics.com/REVLib-2024.json
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.SparkPIDController;
+// import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.SparkAbsoluteEncoder;
+// import com.revrobotics.SparkRelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+// only used for teleop at the moment --> figure out a way to transfer into teleop and autonomous 
+public class ArmSubsystem extends SubsystemBase{
+
+    private CANSparkMax m_leftArm = new CANSparkMax(Constants.operatorStuff.kArmLeft_ID, MotorType.kBrushless);
+    private CANSparkMax m_rightArm = new CANSparkMax(Constants.operatorStuff.kArmRight_ID, MotorType.kBrushless);;
+    AbsoluteEncoder armAbsoluteEncoder= m_rightArm.getAbsoluteEncoder(Type.kDutyCycle);
+   
+    public ArmSubsystem(){
+    armAbsoluteEncoder.setPositionConversionFactor(Constants.ModuleConstants.kTurningEncoderPositionFactor);
+
+   m_leftArm.setIdleMode(IdleMode.kBrake);
+   m_rightArm.setIdleMode(IdleMode.kBrake);
+}
+
+// autonomous attempt 
+public void setShooterAngle(double targetAngle){
+  if(armAbsoluteEncoder.getPosition() < targetAngle){
+    setArm(-(Constants.operatorStuff.kArmSpeedTest));
+  }
+  else setArm(0);
+}
+
+//should self explanatory
+public Command armSpeakerAngle(){
+  return this.startEnd(
+    // When the command is initialized, set the wheels to the intake speed values
+    () -> {
+      /*while (leftArmAbsoluteEncoder.getPosition()>Constants.desiredEncoderValue.speakerArmAngle){
+      setArm(-(Constants.operatorStuff.kArmSpeed));
+      }*/
+      while (armAbsoluteEncoder.getPosition()<Constants.desiredEncoderValue.kSpeakerArmAngle){
+        setArm(-(Constants.operatorStuff.kArmSpeedTest));
+        }
+    },
+    // When the command stops, stop the wheels
+    () -> {
+      stop();
+    });
+}
+
+public Command armIntakeAngle(){
+  return this.startEnd(
+    // When the command is initialized, set the wheels to the intake speed values
+    () -> {
+      while (armAbsoluteEncoder.getPosition()>Constants.desiredEncoderValue.kIntakeArmAngle){
+      setArm(-(Constants.operatorStuff.kArmSpeed));
+      }
+      /*while (leftArmAbsoluteEncoder.getPosition()<Constants.desiredEncoderValue.intakeArmAngle){
+        setArm(Constants.operatorStuff.kArmSpeed);
+        }*/
+    },
+    // When the command stops, stop the wheels
+    () -> {
+      stop();
+    });
+}
+
+public Command armAmpAngle(){
+  return this.startEnd(
+    // When the command is initialized, set the wheels to the intake speed values
+    () -> {
+      /*while (leftArmAbsoluteEncoder.getPosition()>Constants.desiredEncoderValue.ampArmAngle){
+        setArm(-(Constants.operatorStuff.kArmSpeed));
+        }*/
+        while (armAbsoluteEncoder.getPosition()<Constants.desiredEncoderValue.kAmpArmAngle){
+          setArm(Constants.operatorStuff.kArmSpeed);
+          }
+    },
+    // When the command stops, stop the wheels
+    () -> {
+      stop();
+    });
+}
+
+public Command armClockWise(){
+  return this.startEnd(
+    // When the command is initialized, set the wheels to the intake speed values
+    () -> {
+      setArm(Constants.operatorStuff.kArmSpeed);
+    },
+    // When the command stops, stop the wheels
+    () -> {
+      stop();
+    });
+}
 
 
-public class ArmSubsystem extends TrapezoidProfileSubsystem{
-    private CANSparkMax m_leftArm = new CANSparkMax(operatorStuff.kArmLeft_ID, MotorType.kBrushless);
-    private CANSparkMax m_rightArm = new CANSparkMax(operatorStuff.kArmRight_ID, MotorType.kBrushless);
-  
-
-    private final AbsoluteEncoder m_rightArmEncoder;
-    private final SparkPIDController m_pid;
-
-
-    private final ArmFeedforward m_feedforward = new ArmFeedforward(ArmConstants.kSVolts, ArmConstants.kGVolts,ArmConstants.kVVoltSecondPerRad, ArmConstants.kAVoltSecondSquaredPerRad);
-    private double m_goal = ArmConstants.kArmOffsetRads;
-    // used to limit acceleration so arm doesn't die
-    private final SlewRateLimiter m_armSlew = new SlewRateLimiter(ArmConstants.kArmSlewRate); // add arm slew rate to constants file
-
-
-    public ArmSubsystem() {
-    super(
-        new TrapezoidProfile.Constraints(
-            ArmConstants.kMaxVelocityRadPerSecond,
-            ArmConstants.kMaxAccelerationRadPerSecSquared),
-            ArmConstants.kArmOffsetRads);
-
-      m_leftArm.restoreFactoryDefaults();
-      m_rightArm.restoreFactoryDefaults();
-
-      // Setup the encoder and pid controller
-      m_rightArmEncoder = m_rightArm.getAbsoluteEncoder();
-
-      m_rightArmEncoder.setPositionConversionFactor(ArmConstants.kArmEncoderPositionFactor);
-      m_rightArmEncoder.setZeroOffset(ArmConstants.kArmOffsetRads);
-      m_rightArmEncoder.setVelocityConversionFactor(ArmConstants.kArmEncoderVelocityFactor);
-
-
-      // just need to read the left arm for pid, but theoretically they should be reading the same values
-      m_pid = m_rightArm.getPIDController();
-      m_pid.setFeedbackDevice(m_rightArmEncoder);
-
-
-      m_pid.setP(ArmConstants.kP);
-      m_pid.setI(ArmConstants.kI);
-      m_pid.setD(ArmConstants.kD);
-      m_pid.setFF(ArmConstants.kFF);
-      m_pid.setOutputRange(ArmConstants.kMinOutput, ArmConstants.kMaxOutput);
-
-
-      m_leftArm.setIdleMode(IdleMode.kBrake);
-      m_rightArm.setIdleMode(IdleMode.kBrake);
-
-
-      m_leftArm.burnFlash();
-      m_rightArm.burnFlash();
+public Command armCounterClockWise(){
+  return this.startEnd(
+    // When the command is initialized, set the wheels to the intake speed values
+    () -> {
+      setArm(-(Constants.operatorStuff.kArmSpeed));
+    },
+    // When the command stops, stop the wheels
+    () -> {
+      stop();
+    });
+}
+    //a
+    public void setArm(double speed){
+      m_leftArm.set(-speed);
+      m_rightArm.set(speed);
     }
-
     public void stop(){
       m_leftArm.set(0);
       m_rightArm.set(0);
     }
-   
+
+    @Override
     public void periodic(){
-      super.setGoal(m_goal);
-      super.periodic();
-
-      SmartDashboard.getNumber("current arm position", m_rightArmEncoder.getPosition());
+      SmartDashboard.putNumber("arm encoder", getAbsoluteEncoderPosition());
     }
 
-
-    // Arm PID controls
-      public void useState(TrapezoidProfile.State setpoint) {
-      // Calculate the feedforward from the sepoint
-      double feedforward = m_feedforward.calculate(setpoint.position,setpoint.velocity);
-     
-      // Add the feedforward to the PID output to get the motor output
-      m_pid.setReference(setpoint.position, // - ArmConstants.kArmOffsetRads,
-                         ControlType.kPosition, 0, feedforward);
+    public double getAbsoluteEncoderPosition(){
+      return armAbsoluteEncoder.getPosition();
     }
-   
-    public Command setArmGoalCommand(double goal) {
-    return Commands.runOnce(() -> setArmGoal(goal), this);
-    }
-
-
-    public void set(double speed) {
-      m_leftArm.set(m_armSlew.calculate(speed));
-    }
-
-
-    public double getPositionRadians() {
-      return m_rightArmEncoder.getPosition(); // + ArmConstants.kArmOffsetRads;
-    }
-
-
-    public double getArmGoal() {
-      return m_goal;
-    }
-
-
-    public void setArmGoal(double goal) {
-      m_goal = MathUtil.clamp(goal,ArmConstants.kArmOffsetRads-0.1,ArmConstants.kArmMaxRads+0.1);
-    }
-
-
-    public void setEncoderPosition(double position) {
-      m_rightArmEncoder.setZeroOffset(position);
-    }
-  }
+}

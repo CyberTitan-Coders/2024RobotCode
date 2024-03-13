@@ -2,22 +2,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+
 package frc.robot;
 
 //subsystem imports
 import frc.robot.subsystems.ShooterSubsystem;
-//import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+//import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.Constants.IntakeShooter; 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
+//import frc.robot.commands.DetectNote;
 //import frc.robot.Constants.ClimberConstants;
 //import frc.robot.commands.DetectNote;
 import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.SetIntakeSpeed;
 import frc.robot.commands.SetShooterSpeed;
+// import frc.robot.commands.drivetrain.ResetRobotHeading;
+// import frc.robot.commands.drivetrain.setXCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import  edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,7 +43,7 @@ import edu.wpi.first.math.MathUtil;
 // import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.desiredEncoderValue;
+//import frc.robot.Constants.desiredEncoderValue;
 // import edu.wpi.first.wpilibj2.command.Subsystem;
 // import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -62,15 +67,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotContainer{
   // Subsystem initialization 
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  //private final ClimberSubsystem m_climber = new ClimberSubsystem();
+  private final ClimberSubsystem m_climber = new ClimberSubsystem();
   private final ArmSubsystem m_arm = new ArmSubsystem();
 
-  // XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  static CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  static CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   private final SendableChooser<Command> autoChooser; 
 
@@ -91,22 +95,30 @@ public class RobotContainer{
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, false), // was true for ratelimit
+              getDriverLeftY(),
+              getDriverLeftX(),
+              getDriverRightX(),
+                true, true), // changed back to true 3/12/24 
             m_robotDrive));
 
             m_arm.setDefaultCommand(
             // Operator: left joystick arm control  
                 new RunCommand(       
-                () -> m_arm.set(-operatorStuff.kArmSpeed*
+                () -> m_arm.setArm(operatorStuff.kArmSpeed*
                     MathUtil.applyDeadband(m_operatorController.getLeftY(),
                     ArmConstants.kArmDeadband)),m_arm));
 
   
             autoChooser = AutoBuilder.buildAutoChooser();
             SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+
+  public static CommandXboxController getDriverController() {
+    return m_driverController;
+  }
+
+  public static CommandXboxController getOperatorController() {
+    return m_operatorController;
   }
 
   /**
@@ -118,6 +130,35 @@ public class RobotContainer{
    * passing it to a
    * {@link JoystickButton}.
    */
+
+   public static double getLeftXWithDeadband() {
+    return -MathUtil.applyDeadband(m_driverController.getLeftX(),
+        OIConstants.kDriveDeadband);
+  }
+
+  public static double getDriverLeftX() {
+    return .5 * Math.pow(getLeftXWithDeadband(), 5) + .5 * getLeftXWithDeadband();
+  }
+
+  public static double getLeftYWithDeadband() {
+    return -MathUtil.applyDeadband(m_driverController.getLeftY(),
+        OIConstants.kDriveDeadband);
+  }
+
+  public static double getDriverLeftY() {
+    return .5 * Math.pow(getLeftYWithDeadband(), 5) + .5 * getLeftYWithDeadband();
+  }
+
+  public static double getRightXWithDeadband() {
+    return -MathUtil.applyDeadband(m_driverController.getRightX(),
+        OIConstants.kDriveDeadband);
+  }
+
+  public static double getDriverRightX() {
+    return .5 * Math.pow(getRightXWithDeadband(), 5) + .5 * getRightXWithDeadband();
+  }
+
+  
   private void configureButtonBindings() {
     // operator controls 
     /*
@@ -128,13 +169,13 @@ public class RobotContainer{
      * Y Button: shoot reverse 
      * Start Button: shooter set up 
      */
-        // m_operatorController.x()
-        // .whileTrue(new SetShooterSpeed(m_shooter, IntakeShooter.kShootingSpeed))
-        // .whileFalse(new SetShooterSpeed(m_shooter, 0));
+        m_operatorController.x()
+        .whileTrue(new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kTopShootSpeed, Constants.IntakeShooter.kBottomShootSpeed))
+        .whileFalse(new SetShooterSpeed(m_shooter, 0, 0));
 
-        // m_operatorController.y()
-        // .whileTrue(new SetShooterSpeed(m_shooter, -(IntakeShooter.kShootingSpeed)))
-        // .whileFalse(new SetShooterSpeed(m_shooter, 0));
+        m_operatorController.y()
+        .whileTrue(new SetShooterSpeed(m_shooter, -(Constants.IntakeShooter.kTopShootSpeed), -(Constants.IntakeShooter.kBottomShootSpeed)))
+        .whileFalse(new SetShooterSpeed(m_shooter, 0, 0));
 
         m_operatorController.a()
         .whileTrue(new SetIntakeSpeed(m_intake, IntakeShooter.kIntakeSpeed))
@@ -144,11 +185,11 @@ public class RobotContainer{
         .whileTrue(new SetIntakeSpeed(m_intake, -(IntakeShooter.kIntakeSpeed)))
         .whileFalse(new SetIntakeSpeed(m_intake, 0));
 
-        m_operatorController.start()
-        .whileTrue(new SetArmAngle(m_arm, desiredEncoderValue.kSpeakerArmAngle));
+        // m_operatorController.start()
+        // .whileTrue(new SetArmAngle(m_arm, desiredEncoderValue.kSpeakerArmAngle));
 
-        m_operatorController.back()
-        .whileTrue(new SetArmAngle(m_arm, desiredEncoderValue.kIntakeArmAngle));
+        // m_operatorController.back()
+        // .whileTrue(new SetArmAngle(m_arm, desiredEncoderValue.kIntakeArmAngle));
 
         // m_operatorController.start().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30))); // --> change the radian 
         // m_operatorController.back().onTrue(m_arm.setArmGoalCommand(Units.degreesToRadians(30)));
@@ -161,16 +202,18 @@ public class RobotContainer{
         
     // driver controls 
     /*
-     * Right Trigger: climb down (right)
-     * Left Trigger: climb down (left)
      * Right Bumper: climb down (right)
      * Left Bumper: climb down (left)
+     * Right Trigger: climb down (right)
+     * Left Trigger: climb down (left)
      */
-        //  m_driverController.rightTrigger().
-        //  whileTrue(m_climber.climbDownRight());
-        //  m_driverController.leftTrigger().whileTrue(m_climber.climbDownLeft());
-        //  m_driverController.rightBumper().whileTrue(m_climber.climbUpRight());
-        //  m_driverController.leftBumper().whileTrue(m_climber.climbUpLeft());
+         m_driverController.rightBumper().whileTrue(m_climber.climbDownRight());
+         m_driverController.leftBumper().whileTrue(m_climber.climbDownLeft());
+         m_driverController.rightTrigger().whileTrue(m_climber.climbUpRight());
+         m_driverController.leftTrigger().whileTrue(m_climber.climbUpLeft());
+
+         m_operatorController.leftTrigger().whileTrue(m_arm.armSpeakerAngle());
+        
   }
 
   /**
@@ -234,7 +277,7 @@ public class RobotContainer{
     NamedCommands.registerCommand("Intake On", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
     NamedCommands.registerCommand("Arm Speaker", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
-    NamedCommands.registerCommand("Arm Intake", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kIntakeArmAngle));
+    // NamedCommands.registerCommand("Arm Intake", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kIntakeArmAngle));
     //NamedCommands.registerCommand("Sensor Detect Stop", new DetectNote(m_intake));
   }
 }
