@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.72,
+      "y": 4.34
+    },
+    "rotation": 119.59531572343413
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "duo shot left subwoofer to uncomfortable note p1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "duo shot left subwoofer to uncomfortable note p2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left subwoofer to uncomfortable note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

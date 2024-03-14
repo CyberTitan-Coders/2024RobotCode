@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 // import com.revrobotics.SparkAbsoluteEncoder.Type;
 // import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
-import frc.robot.Constants.IntakeShooter;
+//import frc.robot.Constants.IntakeShooter;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
@@ -33,6 +33,8 @@ public class IntakeSubsystem extends SubsystemBase{
     boolean isSensorLow; 
     double lowValue; 
     double colorAccuracy;
+
+    public boolean m_isFinished; 
     
     public IntakeSubsystem(){
         m_intake.setIdleMode(IdleMode.kBrake);
@@ -93,7 +95,7 @@ public class IntakeSubsystem extends SubsystemBase{
         while(match.confidence > 92){
             m_intake.set(0);
         }
-        
+
        }
 
        @Override

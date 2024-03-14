@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7163928362944445,
+      "y": 4.340423066811046
+    },
+    "rotation": 119.12005748370707
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left subwoofer to uncomfortable note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "single shots",
+  "choreoAuto": false
+}

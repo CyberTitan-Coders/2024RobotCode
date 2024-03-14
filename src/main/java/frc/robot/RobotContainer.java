@@ -18,9 +18,6 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
 import frc.robot.commands.DetectNoteColor;
 import frc.robot.commands.DetectNoteSensor;
-//import frc.robot.commands.DetectNote;
-//import frc.robot.Constants.ClimberConstants;
-//import frc.robot.commands.DetectNote;
 import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.SetIntakeSpeed;
 import frc.robot.commands.SetShooterSpeed;
@@ -212,10 +209,10 @@ public class RobotContainer{
      * Right Trigger: climb down (right)
      * Left Trigger: climb down (left)
      */
-         m_driverController.rightBumper().whileTrue(m_rightClimber.climbDownRight());
-         m_driverController.leftBumper().whileTrue(m_leftClimber.climbDownLeft());
-         m_driverController.rightTrigger().whileTrue(m_rightClimber.climbUpRight());
-         m_driverController.leftTrigger().whileTrue(m_leftClimber.climbUpLeft());
+         m_driverController.rightTrigger().whileTrue(m_rightClimber.climbDownRight());
+         m_driverController.leftTrigger().whileTrue(m_leftClimber.climbDownLeft());
+         m_driverController.rightBumper().whileTrue(m_rightClimber.climbUpRight());
+         m_driverController.leftBumper().whileTrue(m_leftClimber.climbUpLeft());
 
          m_operatorController.leftTrigger().whileTrue(m_arm.armSpeakerAngle());
 
@@ -278,7 +275,6 @@ public class RobotContainer{
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
     */
   } 
-
 
   public void registerNamedCommands(){
     NamedCommands.registerCommand("Shooter On", new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kTopShootSpeed, Constants.IntakeShooter.kBottomShootSpeed));
