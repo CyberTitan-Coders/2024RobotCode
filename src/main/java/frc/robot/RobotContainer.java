@@ -16,6 +16,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.Constants.IntakeShooter; 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
+import frc.robot.commands.DetectNoteColor;
 import frc.robot.commands.DetectNoteSensor;
 //import frc.robot.commands.DetectNote;
 //import frc.robot.Constants.ClimberConstants;
@@ -285,7 +286,6 @@ public class RobotContainer{
     NamedCommands.registerCommand("Intake On", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
     NamedCommands.registerCommand("Arm Speaker", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
-    // NamedCommands.registerCommand("Arm Intake", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kIntakeArmAngle));
-    //NamedCommands.registerCommand("Sensor Detect Stop", new DetectNote(m_intake));
+    NamedCommands.registerCommand("Detect Color", new DetectNoteColor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
   }
 }
