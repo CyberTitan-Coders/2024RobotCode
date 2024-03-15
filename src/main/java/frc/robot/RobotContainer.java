@@ -18,7 +18,8 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
 import frc.robot.commands.DetectNoteColor;
 import frc.robot.commands.DetectNoteSensor;
-import frc.robot.commands.SetArmAngle;
+import frc.robot.commands.SetArmAngleDown;
+import frc.robot.commands.SetArmAngleUp;
 import frc.robot.commands.SetIntakeSpeed;
 import frc.robot.commands.SetShooterSpeed;
 // import frc.robot.commands.drivetrain.ResetRobotHeading;
@@ -219,7 +220,12 @@ public class RobotContainer{
 
         //  // just some test code 
         //  m_driverController.x()
-        // .whileTrue(new DetectNoteLow(m_intake, 0.2));
+        // .whileTrue(new DetectNoteColor(m_intake, 0.2));
+
+        //  m_driverController.y()
+        // .whileTrue(new SetIntakeSpeed(m_intake, 0));
+
+        
   }
 
   /**
@@ -281,7 +287,9 @@ public class RobotContainer{
     NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0, 0));
     NamedCommands.registerCommand("Intake On", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
-    NamedCommands.registerCommand("Arm Speaker", new SetArmAngle(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
+    NamedCommands.registerCommand("Arm Speaker Up", new SetArmAngleUp(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
+    NamedCommands.registerCommand("Arm Speaker Down", new SetArmAngleDown(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
     NamedCommands.registerCommand("Detect Color", new DetectNoteColor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
+    NamedCommands.registerCommand("Detect Sensor", new DetectNoteSensor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
   }
 }

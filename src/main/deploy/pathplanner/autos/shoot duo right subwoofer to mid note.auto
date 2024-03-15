@@ -20,18 +20,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": " right subwoofer duo shot p2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "move from right subwoofer center"
           }
         }
       ]
     }
   },
-  "folder": "duo shots",
+  "folder": null,
   "choreoAuto": false
 }

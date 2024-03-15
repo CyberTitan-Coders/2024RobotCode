@@ -1,31 +1,40 @@
-// package frc.robot.subsystems;
-
-// import edu.wpi.first.apriltag.AprilTagFieldLayout;
-// import edu.wpi.first.apriltag.AprilTagFields;
-// import edu.wpi.first.math.geometry.Pose2d;
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import frc.robot.Constants.VisionConstants;
-
-// import java.io.IOException;
-// import java.util.Optional;
-
-// import org.photonvision.EstimatedRobotPose;
-// import org.photonvision.PhotonCamera;
-// import org.photonvision.PhotonPoseEstimator;
-// import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-// import org.photonvision.targeting.PhotonPipelineResult;
-
-// public class VisionSubsystem extends SubsystemBase{
-//     private PhotonCamera m_vision;
-//     private PhotonPipelineResult cameraResults;
-//     private PhotonPoseEstimator poseEstimator;
+package frc.robot.subsystems;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
 
 
-//     public VisionSubsystem(){
+public class VisionSubsystem {
 
-//     }
+    UsbCamera camera0; 
+    UsbCamera camera1; 
+    VideoSink server;
+    boolean camButtonEnabled = true; 
+    int activeCamera = 0;
+
+    public VisionSubsystem(){
+        camera0 = CameraServer.startAutomaticCapture(0);
+        camera1 = CameraServer.startAutomaticCapture(1);
+        server = CameraServer.getServer();
+        activeCamera = 0;
+        server.setSource(camera0);
+    }
+
+
+    // Jeanelle fix this 
+    public void buttonControl(){
+        camButtonEnabled = false; 
+        if(activeCamera == 0){
+            activeCamera = 1;
+            server.setSource(camera1);
+        }
+        else{
+            activeCamera = 0; 
+            server.setSource(camera0);
+        }
+        camButtonEnabled = true; 
+    }
+
+
     
-// }
-
-// USE METHOD 2 FOR CAMERA 
+}
