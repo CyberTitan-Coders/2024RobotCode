@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.72,
-      "y": 4.34
+      "x": 0.7218158264581296,
+      "y": 4.258847873688592
     },
     "rotation": 119.59531572343413
   },
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "duo shot left subwoofer to uncomfortable note p2"
+            "pathName": null
           }
         },
         {

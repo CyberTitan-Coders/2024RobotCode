@@ -36,9 +36,11 @@ public final class Constants {
     }
 
     public static final class desiredEncoderValue {
-    public static final double kSpeakerArmAngle=3.14;
-    public static final double kAmpArmAngle=0;
+    public static final double kSpeakerArmAngleAuto=3.35;
+    public static final double kSpeakerArmAngle = 2.8; 
+    public static final double kIntakeAngle = 2.6; 
     public static final double kIntakeArmAngle=3.9;
+    public static final double kShooterSide = 2.8; 
 
     public static final double kClimberPositionTop=0;
     public static final double kClimberPositionBottom=0;
@@ -112,7 +114,7 @@ public final class Constants {
 
     public static final double kArmSpeed=.25;
     // increase test --> eventually will be used for auto values 
-    public static final double kArmSpeedTest = 0.1; 
+    public static final double kArmSpeedTest = 0.2; 
     public static final double kClimberSpeed=.20;
     public static final double kIdleSpeed=0;
   }
@@ -134,7 +136,7 @@ public final class Constants {
     public static final Translation2d frModule = new Translation2d(kWheelBase / 2, -kTrackWidth / 2);
     public static final Translation2d blModule = new Translation2d(-kWheelBase / 2, kTrackWidth / 2);
     public static final Translation2d brModule = new Translation2d(-kWheelBase / 2, -kTrackWidth / 2);
-    public static final double kMaxSpeedMetersPerSecond = 5;  //was 4.8 changed to 5 -- may slowly increment 
+    public static final double kMaxSpeedMetersPerSecond = 5.2;  //was 5 changed to 5.2 -- may slowly increment 
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(1.0,0,0),
       new PIDConstants(1.0,0,0),

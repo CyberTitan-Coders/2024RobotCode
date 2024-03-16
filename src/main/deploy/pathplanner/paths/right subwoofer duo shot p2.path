@@ -30,28 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "shoot marker",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
-      "name": "maybe intake",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": []
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -60,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.83598978064231,
+    "rotation": 61.852881595992685,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "duo shot right subwoofer to center",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -177.64670313389172,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

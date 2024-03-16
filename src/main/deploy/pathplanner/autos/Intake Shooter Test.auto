@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.33,
-      "y": 5.5
+      "x": 1.7238989114212167,
+      "y": 5.3635631379679305
     },
     "rotation": 0
   },
@@ -14,13 +14,25 @@
         {
           "type": "named",
           "data": {
+            "name": "Arm Speaker Down"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shooter On"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Arm"
           }
         },
         {
@@ -32,13 +44,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Intake"
+            "waitTime": 1.25
           }
         },
         {
@@ -50,25 +56,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake On"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "test move part 1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
+            "name": "Stop Intake"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Stop Intake"
+            "name": "Intake Angle"
           }
         }
       ]

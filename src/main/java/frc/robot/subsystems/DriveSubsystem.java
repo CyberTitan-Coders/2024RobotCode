@@ -12,17 +12,20 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import edu.wpi.first.math.util.Units;
+// import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.Swerve;
-import frc.robot.RobotContainer;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import com.revrobotics.CANSparkBase.IdleMode;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+// import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.util.PathPlannerLogging;
+// import com.pathplanner.lib.util.ReplanningConfig;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 // https://dev.studica.com/releases/2024/NavX.json
@@ -69,18 +72,16 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
-  // Limits rate of output signal to the specified range, provides stability 
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   public IMUAxis yaw = m_gyro.getYawAxis();
-  private double correctAngle; 
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      getHeading(),
+      Rotation2d.fromDegrees(m_gyro.getAngle(yaw)),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -113,7 +114,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        getHeading(),
+        Rotation2d.fromDegrees(m_gyro.getAngle(yaw)),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -141,7 +142,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        getHeading(),
+        Rotation2d.fromDegrees(m_gyro.getAngle(yaw)),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -307,46 +308,9 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
-
-  //  public double getHeading() {
-  //   return Rotation2d.fromDegrees(m_gyro.getAngle(yaw)).getDegrees();
-  // }
-
-
-  // added code for heading correction 
-  public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle());
+  public double getHeading() {
+    return Rotation2d.fromDegrees(m_gyro.getAngle(yaw)).getDegrees();
   }
-
-  public int getNumberOfRotations() {
-    return (int) getHeading().getDegrees()/360;
-  }
-  
-  public double getAngleModifier(double angle) {
-    double least = angle;
-    if (Math.abs(getHeading().getDegrees() - least) > Math.abs(getHeading().getDegrees() - (angle + 360))) least = angle + 360;
-    if (Math.abs(getHeading().getDegrees() - least) > Math.abs(getHeading().getDegrees() - (angle - 360))) least = angle - 360;
-    return least;
-  }
-
-  // double check multiplying by 360, find where to call this 
-  public double getCorrectAngleTarget(double x) {
-    correctAngle = x;
-    if (Math.abs(getNumberOfRotations()) >= 1) {
-      correctAngle = correctAngle + (360 * (getNumberOfRotations()));
-    }
-    correctAngle = getAngleModifier(correctAngle);
-    return correctAngle;
-  }
-
-  public void turnToAngle(double turn) {
-    drive(
-        RobotContainer.getDriverLeftY(),
-        RobotContainer.getDriverLeftX(),
-        -(turn),
-            true, true);
-  }
-  // end of added code for heading correction 
 
   /**
    * Returns the turn rate of the robot.

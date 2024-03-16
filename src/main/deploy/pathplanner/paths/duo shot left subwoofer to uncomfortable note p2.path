@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 0.72,
-        "y": 4.34
+        "y": 4.26
       },
       "prevControl": {
-        "x": 1.5053317825933898,
-        "y": 4.213467374303169
+        "x": 1.3661700222148208,
+        "y": 4.157200223738551
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 119.92997882911415,
+    "rotation": -59.743562836470765,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "duo shot left subwoofer to uncomfortable note",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -178.9190758133394,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

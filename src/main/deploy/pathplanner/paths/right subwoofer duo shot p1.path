@@ -60,13 +60,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 0.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "duo shot right subwoofer to center",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -119.98163936884937,
+    "rotation": 59.83070775492326,
     "velocity": 0
   },
   "useDefaultConstraints": true

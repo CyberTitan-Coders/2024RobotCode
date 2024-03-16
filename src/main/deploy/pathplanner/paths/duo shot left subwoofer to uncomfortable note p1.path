@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.72,
-        "y": 4.34
+        "x": 0.7218158264581296,
+        "y": 4.258847873688592
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8232420006879377,
-        "y": 4.111991050457951
+        "x": 1.8691148741152595,
+        "y": 4.074895971115736
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 4.14
       },
       "prevControl": {
-        "x": 0.9127296966579629,
-        "y": 4.273533556011657
+        "x": 1.86729904765713,
+        "y": 4.053248321165694
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.99999999999986,
-    "rotateFast": false
+    "rotation": 0.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "duo shot left subwoofer to uncomfortable note",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 120.40517572051806,
+    "rotation": -59.80267727455592,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -2,19 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7365015087811937,
-      "y": 6.814156597901747
+      "x": 2,
+      "y": 2
     },
-    "rotation": 60.52411099675429
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Copy of move from right subwoofer center"
+            "name": "Starting Position"
           }
         }
       ]

@@ -44,6 +44,10 @@ public void setShooterAngleDown(double targetAngle){
   }
 }
 
+public void stopArm(){
+  setArm(0);
+}
+
 //should self explanatory
 public Command armSpeakerAngle(){
   return this.startEnd(
@@ -53,6 +57,23 @@ public Command armSpeakerAngle(){
       setArm(-(Constants.operatorStuff.kArmSpeed));
       }*/
       while (armAbsoluteEncoder.getPosition()<Constants.desiredEncoderValue.kSpeakerArmAngle){
+        setArm(-(Constants.operatorStuff.kArmSpeedTest));
+        }
+    },
+    // When the command stops, stop the wheels
+    () -> {
+      stop();
+    });
+}
+
+public Command armSpeakerAngle2(){
+  return this.startEnd(
+    // When the command is initialized, set the wheels to the intake speed values
+    () -> {
+      /*while (leftArmAbsoluteEncoder.getPosition()>Constants.desiredEncoderValue.speakerArmAngle){
+      setArm(-(Constants.operatorStuff.kArmSpeed));
+      }*/
+      while (armAbsoluteEncoder.getPosition()<Constants.desiredEncoderValue.kShooterSide){
         setArm(-(Constants.operatorStuff.kArmSpeedTest));
         }
     },
@@ -79,22 +100,22 @@ public Command armIntakeAngle(){
     });
 }
 
-public Command armAmpAngle(){
-  return this.startEnd(
-    // When the command is initialized, set the wheels to the intake speed values
-    () -> {
-      /*while (leftArmAbsoluteEncoder.getPosition()>Constants.desiredEncoderValue.ampArmAngle){
-        setArm(-(Constants.operatorStuff.kArmSpeed));
-        }*/
-        while (armAbsoluteEncoder.getPosition()<Constants.desiredEncoderValue.kAmpArmAngle){
-          setArm(Constants.operatorStuff.kArmSpeed);
-          }
-    },
-    // When the command stops, stop the wheels
-    () -> {
-      stop();
-    });
-}
+// public Command armAmpAngle(){
+//   return this.startEnd(
+//     // When the command is initialized, set the wheels to the intake speed values
+//     () -> {
+//       /*while (leftArmAbsoluteEncoder.getPosition()>Constants.desiredEncoderValue.ampArmAngle){
+//         setArm(-(Constants.operatorStuff.kArmSpeed));
+//         }*/
+//         while (armAbsoluteEncoder.getPosition()<Constants.desiredEncoderValue.kAmpArmAngle){
+//           setArm(Constants.operatorStuff.kArmSpeed);
+//           }
+//     },
+//     // When the command stops, stop the wheels
+//     () -> {
+//       stop();
+//     });
+// }
 
 public Command armClockWise(){
   return this.startEnd(
