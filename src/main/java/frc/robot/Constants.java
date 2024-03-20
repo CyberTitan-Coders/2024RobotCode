@@ -136,7 +136,7 @@ public final class Constants {
     public static final Translation2d frModule = new Translation2d(kWheelBase / 2, -kTrackWidth / 2);
     public static final Translation2d blModule = new Translation2d(-kWheelBase / 2, kTrackWidth / 2);
     public static final Translation2d brModule = new Translation2d(-kWheelBase / 2, -kTrackWidth / 2);
-    public static final double kMaxSpeedMetersPerSecond = 5.2;  //was 5 changed to 5.2 -- may slowly increment 
+    public static final double kMaxSpeedMetersPerSecond = 6;  //was 5 changed to 5.2 -- may slowly increment 
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(1.0,0,0),
       new PIDConstants(1.0,0,0),
@@ -149,7 +149,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 2;  //was 4.8 tested with 0.8
+    public static final double kMaxSpeedMetersPerSecond = 3.8;  //was 4.8 tested with 0.8
     public static final double kMaxAngularSpeed = Math.PI; // radians per second  was 2 Pi tested .25 PI
 
     public static final double kDirectionSlewRate = 1.2; // radians per second was 1.2 tested 0.2

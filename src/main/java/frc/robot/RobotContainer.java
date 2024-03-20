@@ -7,23 +7,23 @@ package frc.robot;
 
 //subsystem imports
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.LeftClimberSubsystem;
-import frc.robot.subsystems.RightClimberSubsystem;
+// import frc.robot.subsystems.LeftClimberSubsystem;
+// import frc.robot.subsystems.RightClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+//import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.subsystems.CameraSubsystem;
-
+import frc.robot.Constants.IntakeShooter; 
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.IntakeShooter;
-// import frc.robot.commands.CameraControl;
+import frc.robot.Constants.operatorStuff;
+
+// commands 
 // import frc.robot.commands.DetectNoteColor;
 import frc.robot.commands.DetectNoteSensor;
 import frc.robot.commands.SetArmAngleDown;
 import frc.robot.commands.SetArmAngleUp;
 import frc.robot.commands.SetIntakeSpeed;
 import frc.robot.commands.SetShooterSpeed;
-import frc.robot.commands.StopArmMove;
 // import frc.robot.commands.drivetrain.ResetRobotHeading;
 // import frc.robot.commands.drivetrain.setXCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,7 +46,6 @@ import edu.wpi.first.math.MathUtil;
 // import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.operatorStuff;
 //import frc.robot.Constants.desiredEncoderValue;
 // import edu.wpi.first.wpilibj2.command.Subsystem;
 // import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -56,7 +55,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 //import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -75,16 +73,15 @@ public class RobotContainer{
   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  private final LeftClimberSubsystem m_leftClimber = new LeftClimberSubsystem();
-  private final RightClimberSubsystem m_rightClimber = new RightClimberSubsystem();
-  // private final CameraSubsystem m_camera = new CameraSubsystem();
+  // private final LeftClimberSubsystem m_leftClimber = new LeftClimberSubsystem();
+  // private final RightClimberSubsystem m_rightClimber = new RightClimberSubsystem();
 
   private final ArmSubsystem m_arm = new ArmSubsystem();
 
   static CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   static CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  // private final SendableChooser<Command> autoChooser; 
+  private final SendableChooser<Command> autoChooser; 
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -102,24 +99,23 @@ public class RobotContainer{
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
-          () -> m_robotDrive.drive(
-              -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-              -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-              -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-              true, false), // was true for ratelimit
-          m_robotDrive));
-          m_robotDrive.setCoast();
+            () -> m_robotDrive.drive(
+              getDriverLeftY(),
+              getDriverLeftX(),
+              getDriverRightX(),
+                true, true), // changed back to true 3/12/24 
+            m_robotDrive));
 
-              m_arm.setDefaultCommand(
+            m_arm.setDefaultCommand(
             // Operator: left joystick arm control  
                 new RunCommand(       
                 () -> m_arm.setArm(operatorStuff.kArmSpeed*
                     MathUtil.applyDeadband(m_operatorController.getLeftY(),
                     ArmConstants.kArmDeadband)),m_arm));
 
-          // autoChooser = AutoBuilder.buildAutoChooser("straight.auto");
-          // SmartDashboard.putData("Auto Chooser", autoChooser);
-          // autoChooser.getSelected();
+  
+            autoChooser = AutoBuilder.buildAutoChooser();
+            SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   public static CommandXboxController getDriverController() {
@@ -140,6 +136,33 @@ public class RobotContainer{
    * {@link JoystickButton}.
    */
 
+   public static double getLeftXWithDeadband() {
+    return -MathUtil.applyDeadband(m_driverController.getLeftX(),
+        OIConstants.kDriveDeadband);
+  }
+
+  public static double getDriverLeftX() {
+    return .5 * Math.pow(getLeftXWithDeadband(), 5) + .5 * getLeftXWithDeadband();
+  }
+
+  public static double getLeftYWithDeadband() {
+    return -MathUtil.applyDeadband(m_driverController.getLeftY(),
+        OIConstants.kDriveDeadband);
+  }
+
+  public static double getDriverLeftY() {
+    return .5 * Math.pow(getLeftYWithDeadband(), 5) + .5 * getLeftYWithDeadband();
+  }
+
+  public static double getRightXWithDeadband() {
+    return -MathUtil.applyDeadband(m_driverController.getRightX(),
+        OIConstants.kDriveDeadband);
+  }
+
+  public static double getDriverRightX() {
+    return .5 * Math.pow(getRightXWithDeadband(), 5) + .5 * getRightXWithDeadband();
+  }
+
   
   private void configureButtonBindings() {
     // operator controls 
@@ -149,8 +172,7 @@ public class RobotContainer{
      * B Button: intake reverse  
      * X Button: shoot out 
      * Y Button: shoot reverse 
-     * Left Trigger: shooter set up 
-     * Right Bumper: camera control 
+     * Start Button: shooter set up 
      */
         m_operatorController.x()
         .whileTrue(new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kTopShootSpeed, Constants.IntakeShooter.kBottomShootSpeed))
@@ -167,11 +189,6 @@ public class RobotContainer{
         m_operatorController.b()
         .whileTrue(new SetIntakeSpeed(m_intake, -(IntakeShooter.kIntakeSpeed)))
         .whileFalse(new SetIntakeSpeed(m_intake, 0));
-
-        m_operatorController.leftTrigger().whileTrue(m_arm.armSpeakerAngle());
-         m_operatorController.rightTrigger().whileTrue(m_arm.armSpeakerAngle());
-
-        // m_operatorController.rightBumper().whileTrue(new CameraControl(m_camera));
 
         // m_operatorController.start()
         // .whileTrue(new SetArmAngle(m_arm, desiredEncoderValue.kSpeakerArmAngle));
@@ -195,10 +212,12 @@ public class RobotContainer{
      * Right Trigger: climb down (right)
      * Left Trigger: climb down (left)
      */
-         m_driverController.rightTrigger().whileTrue(m_rightClimber.climbDownRight());
-         m_driverController.leftTrigger().whileTrue(m_leftClimber.climbDownLeft());
-         m_driverController.rightBumper().whileTrue(m_rightClimber.climbUpRight());
-         m_driverController.leftBumper().whileTrue(m_leftClimber.climbUpLeft());
+        //  m_driverController.rightTrigger().whileTrue(m_rightClimber.climbDownRight());
+        //  m_driverController.leftTrigger().whileTrue(m_leftClimber.climbDownLeft());
+        //  m_driverController.rightBumper().whileTrue(m_rightClimber.climbUpRight());
+        //  m_driverController.leftBumper().whileTrue(m_leftClimber.climbUpLeft());
+
+         m_operatorController.leftTrigger().whileTrue(m_arm.armSpeakerAngle());
 
 
         //  // just some test code 
@@ -220,8 +239,8 @@ public class RobotContainer{
 
     // create test
     m_robotDrive.setBrake();
-    return new PathPlannerAuto("straight");
-    // return autoChooser.getSelected();
+    //return new PathPlannerAuto("Example Auto");
+    return autoChooser.getSelected();
     
     // Create config for trajectory
     /* 
@@ -270,12 +289,9 @@ public class RobotContainer{
     NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0, 0));
     NamedCommands.registerCommand("Intake On", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
-    NamedCommands.registerCommand("Arm Speaker Up", new SetArmAngleUp(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngleAuto));
-    NamedCommands.registerCommand("Arm Speaker Down", new SetArmAngleDown(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngleAuto));
-    //NamedCommands.registerCommand("Detect Color", new DetectNoteColor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
+    NamedCommands.registerCommand("Arm Speaker Up", new SetArmAngleUp(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
+    NamedCommands.registerCommand("Arm Speaker Down", new SetArmAngleDown(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
+    // NamedCommands.registerCommand("Detect Color", new DetectNoteColor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Detect Sensor", new DetectNoteSensor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
-    NamedCommands.registerCommand("Stop Arm", new StopArmMove(m_arm));
-    NamedCommands.registerCommand("Starting Position", new SetArmAngleUp(m_arm, 3.67));
-    NamedCommands.registerCommand("Intake Angle", new SetArmAngleDown(m_arm, Constants.desiredEncoderValue.kIntakeAngle));
   }
 }

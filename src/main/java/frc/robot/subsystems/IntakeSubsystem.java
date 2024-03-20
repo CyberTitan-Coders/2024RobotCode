@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 import com.revrobotics.CANSparkBase.IdleMode;
 //import frc.robot.Constants.IntakeShooter;
 
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.util.Color;
+// import edu.wpi.first.wpilibj.I2C;
+// import edu.wpi.first.wpilibj.util.Color;
 
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorMatch;
+// import com.revrobotics.ColorSensorV3;
+// import com.revrobotics.ColorMatchResult;
+// import com.revrobotics.ColorMatch;
 
 
 public class IntakeSubsystem extends SubsystemBase{
