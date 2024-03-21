@@ -55,6 +55,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 //import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -81,7 +82,7 @@ public class RobotContainer{
   static CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   static CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private final SendableChooser<Command> autoChooser; 
+  // private final SendableChooser<Command> autoChooser; 
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -114,8 +115,8 @@ public class RobotContainer{
                     ArmConstants.kArmDeadband)),m_arm));
 
   
-            autoChooser = AutoBuilder.buildAutoChooser();
-            SmartDashboard.putData("Auto Chooser", autoChooser);
+            // autoChooser = AutoBuilder.buildAutoChooser();
+            // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   public static CommandXboxController getDriverController() {
@@ -239,8 +240,8 @@ public class RobotContainer{
 
     // create test
     m_robotDrive.setBrake();
-    //return new PathPlannerAuto("Example Auto");
-    return autoChooser.getSelected();
+    return new PathPlannerAuto("Test Path");
+    // return autoChooser.getSelected();
     
     // Create config for trajectory
     /* 
