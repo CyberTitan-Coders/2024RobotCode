@@ -13,17 +13,19 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 //import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.Constants.IntakeShooter; 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.operatorStuff;
 
 // commands 
 // import frc.robot.commands.DetectNoteColor;
-import frc.robot.commands.DetectNoteSensor;
+//import frc.robot.commands.DetectNoteSensor;
 import frc.robot.commands.SetArmAngleDown;
 import frc.robot.commands.SetArmAngleUp;
 import frc.robot.commands.SetIntakeSpeed;
 import frc.robot.commands.SetShooterSpeed;
+import frc.robot.commands.CameraControl;
 // import frc.robot.commands.drivetrain.ResetRobotHeading;
 // import frc.robot.commands.drivetrain.setXCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,16 +54,17 @@ import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 //import edu.wpi.first.wpilibj2.command.button.POVButton;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 //import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //import edu.wpi.first.wpilibj.GenericHID;
 //import edu.wpi.first.wpilibj.Joystick;
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -74,10 +77,15 @@ public class RobotContainer{
   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final CameraSubsystem m_camera = new CameraSubsystem();
+
+  //private final PathPlannerAuto m_auto = new PathPlannerAuto("Amp Auto");
+  
   // private final LeftClimberSubsystem m_leftClimber = new LeftClimberSubsystem();
   // private final RightClimberSubsystem m_rightClimber = new RightClimberSubsystem();
 
   private final ArmSubsystem m_arm = new ArmSubsystem();
+
 
   static CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   static CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -191,6 +199,23 @@ public class RobotContainer{
         .whileTrue(new SetIntakeSpeed(m_intake, -(IntakeShooter.kIntakeSpeed)))
         .whileFalse(new SetIntakeSpeed(m_intake, 0));
 
+         m_operatorController.leftBumper()
+        .whileTrue(new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kAmpShotSpeed, Constants.IntakeShooter.kAmpShotSpeed))
+        .whileFalse(new SetShooterSpeed(m_shooter, 0, 0));
+
+
+        m_driverController.x()
+        .whileTrue(new CameraControl(m_camera, 0));
+
+        m_driverController.y()
+        .whileTrue(new CameraControl(m_camera, 1));
+       
+        
+        // m_operatorController.rightBumper()
+        // .whileTrue(new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kTrapShotSpeed, Constants.IntakeShooter.kTrapShotSpeed))
+        // .whileFalse(new SetShooterSpeed(m_shooter, 0, 0));
+        
+        
         // m_operatorController.start()
         // .whileTrue(new SetArmAngle(m_arm, desiredEncoderValue.kSpeakerArmAngle));
 
@@ -219,16 +244,11 @@ public class RobotContainer{
         //  m_driverController.leftBumper().whileTrue(m_leftClimber.climbUpLeft());
 
          m_operatorController.leftTrigger().whileTrue(m_arm.armSpeakerAngle());
+         m_operatorController.rightBumper().whileTrue(m_arm.armAmpAngle());
+         m_operatorController.rightTrigger().whileTrue(m_arm.startingPosition());
 
-
-        //  // just some test code 
-        //  m_driverController.x()
-        // .whileTrue(new DetectNoteColor(m_intake, 0.2));
-
-        //  m_driverController.y()
-        // .whileTrue(new SetIntakeSpeed(m_intake, 0));
-
-        
+         m_driverController.y().onTrue(m_robotDrive.runOnce(m_robotDrive::zeroHeading));
+        //  m_driverController.y().whileTrue();
   }
 
   /**
@@ -240,7 +260,8 @@ public class RobotContainer{
 
     // create test
     m_robotDrive.setBrake();
-    return new PathPlannerAuto("Test Path");
+
+    return new PathPlannerAuto("Amp Auto");
     // return autoChooser.getSelected();
     
     // Create config for trajectory
@@ -286,13 +307,15 @@ public class RobotContainer{
   } 
 
   public void registerNamedCommands(){
-    NamedCommands.registerCommand("Shooter On", new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kTopShootSpeed, Constants.IntakeShooter.kBottomShootSpeed));
+    NamedCommands.registerCommand("Shooter On Amp", new SetShooterSpeed(m_shooter, Constants.IntakeShooter.kAmpShotSpeed, Constants.IntakeShooter.kAmpShotSpeed));
     NamedCommands.registerCommand("Stop Shooter", new SetShooterSpeed(m_shooter, 0, 0));
     NamedCommands.registerCommand("Intake On", new SetIntakeSpeed(m_intake, Constants.IntakeShooter.kIntakeSpeed));
     NamedCommands.registerCommand("Stop Intake", new SetIntakeSpeed(m_intake, 0));
     NamedCommands.registerCommand("Arm Speaker Up", new SetArmAngleUp(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
     NamedCommands.registerCommand("Arm Speaker Down", new SetArmAngleDown(m_arm, Constants.desiredEncoderValue.kSpeakerArmAngle));
     // NamedCommands.registerCommand("Detect Color", new DetectNoteColor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
-    NamedCommands.registerCommand("Detect Sensor", new DetectNoteSensor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
+   // NamedCommands.registerCommand("Detect Sensor", new DetectNoteSensor(m_intake, Constants.IntakeShooter.kIntakeSpeed));
+    NamedCommands.registerCommand("Intake Angle", new SetArmAngleDown(m_arm, Constants.desiredEncoderValue.kIntakeArmAngle));
+    NamedCommands.registerCommand("Amp Angle", new SetArmAngleUp(m_arm, Constants.desiredEncoderValue.kAmpArmAngle));
   }
 }
