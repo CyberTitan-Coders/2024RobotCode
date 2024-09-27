@@ -3,6 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 
+
+/*
+ * pathplanner package url: https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json
+ * rev package url: https://software-metadata.revrobotics.com/REVLib-2024.json
+ */
+
+
 package frc.robot;
 
 //subsystem imports
