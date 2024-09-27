@@ -22,8 +22,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 public class IntakeSubsystem extends SubsystemBase{
 
     public static CANSparkMax m_intake = new CANSparkMax(operatorStuff.kIntake_ID, MotorType.kBrushless);
-   // public static final Ultrasonic m_sensHighIntake = new Ultrasonic(0, 1);
-    public static final Ultrasonic m_sensLowIntake = new Ultrasonic(3,2);
+    public static final Ultrasonic m_sensHighIntake = new Ultrasonic(1, 0);
+    //public static final Ultrasonic m_sensLowIntake = new Ultrasonic(3,2);
     // private final I2C.Port i2cPort = I2C.Port.kOnboard;
     // private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
     // private final ColorMatch m_colorMatcher = new ColorMatch();
@@ -51,8 +51,8 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intake.set(0);
        }
 
-       public double getLowSensor(){
-        return m_sensLowIntake.getRangeInches();
+       public double getSensor(){
+        return m_sensHighIntake.getRangeInches();
        }
     //    public double getHighSensor(){
     //     return m_sensHighIntake.getRangeInches();
@@ -76,17 +76,17 @@ public class IntakeSubsystem extends SubsystemBase{
     //     SmartDashboard.putString("Detected Color", colorString);
     //    }
 
-       // used for detecting note 
-        public void sensorDetection(double speed){
-        lowValue = m_sensLowIntake.getRangeInches();
-        if(lowValue < 6){
-            m_intake.set(0);
-            isSensorLow = true;
-        }
-        else 
-            m_intake.set(speed);
-            isSensorLow = false; 
-       }
+    //    // used for detecting note 
+    //     public void sensorDetection(double speed){
+    //     lowValue = m_sensLowIntake.getRangeInches();
+    //     if(lowValue < 6){
+    //         m_intake.set(0);
+    //         isSensorLow = true;
+    //     }
+    //     else 
+    //         m_intake.set(speed);
+    //         isSensorLow = false; 
+    //    }
        
     //    public void colorDetection(double speed){
     //     Color detectedColor = m_colorSensor.getColor();
@@ -101,9 +101,9 @@ public class IntakeSubsystem extends SubsystemBase{
         public void periodic(){
         //detectColor();
         //SmartDashboard.putNumber("High Sensor reading", getHighSensor());
-        SmartDashboard.putNumber("Low Sensor reading", getLowSensor());
+        SmartDashboard.putNumber("Sensor reading", getSensor());
         //SmartDashboard.putBoolean("High Sensor status", isSensorHigh);
-        SmartDashboard.putBoolean("Low Sensor status", isSensorLow);
+        // SmartDashboard.putBoolean("Low Sensor status", isSensorLow);
             }
        
         }

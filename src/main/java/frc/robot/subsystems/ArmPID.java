@@ -1,7 +1,3 @@
-// TrapezoidalPrfile subsystem modified based on Team 1108 Template
-//https://github.com/frc1108/Robot2023/blob/12fe3c9d7fb5bbf415d46095e169d892660d4aa7/src/main/java/frc/robot/subsystems/ArmSubsystem.java#L111C1-L120C2
-
-
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.TrapezoidProfileSubsystem;

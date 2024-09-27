@@ -2,19 +2,61 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.407706324685116,
-      "y": 7.284140331476098
+      "x": 0.5411044202972841,
+      "y": 7.22558614874719
     },
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0
+            "pathName": "Amp Auto 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter On Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake On"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Angle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Angle"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Auto 2"
           }
         }
       ]

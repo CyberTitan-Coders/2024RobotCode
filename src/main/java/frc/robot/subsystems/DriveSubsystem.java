@@ -63,7 +63,7 @@ public class DriveSubsystem extends SubsystemBase {
   };
 
   // The gyro sensor
-  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  public final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   // AHRS navx = new AHRS(SPI.Port.kMXP);
   // AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 

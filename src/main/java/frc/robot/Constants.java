@@ -36,11 +36,13 @@ public final class Constants {
     }
 
     public static final class desiredEncoderValue {
-    public static final double kSpeakerArmAngleAuto=3.35;
-    public static final double kSpeakerArmAngle = 2.8; 
-    public static final double kIntakeAngle = 2.6; 
-    public static final double kIntakeArmAngle=3.9;
+    public static final double kSpeakerArmAngle = 2.905; 
+    public static final double KSpeakerAngleAuto = 3.3; 
+    public static final double kIntakeArmAngle=3.7;
     public static final double kShooterSide = 2.8; 
+    public static final double kStartingAngle = 3.9; 
+    public static final double kAmpArmAngle = 4.3;
+    public static final double kTrapArmAngle = 2.948;
 
     public static final double kClimberPositionTop=0;
     public static final double kClimberPositionBottom=0;
@@ -125,6 +127,8 @@ public final class Constants {
     public static final double kBottomShootSpeed = .65; 
     public static final double kIntakeToShootingSpeed=.75;
     public static final double kIntakeSpeed=.4;
+    public static final double kAmpShotSpeed = .1;
+    public static final double kTrapShotSpeed = .35;
   }
 
   public static final class Swerve {

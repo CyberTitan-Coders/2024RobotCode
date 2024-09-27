@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+
+//import edu.wpi.first.wpilibj.ADIS16470_IMU;
 //import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -12,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.OIConstants;
+
+//import frc.robot.subsystems.DriveSubsystem;
 //import frc.robot.subsystems.DriveSubsystem;
 //import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -58,6 +62,7 @@ private static final String version = "Jeanelle's laptop";
 
   private RobotContainer m_robotContainer;
   //private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -169,6 +174,7 @@ private static final String version = "Jeanelle's laptop";
       m_autonomousCommand.cancel();
 
       //m_robotDrive.setCoast();
+     // m_gyro.reset();
 
     }
   }
