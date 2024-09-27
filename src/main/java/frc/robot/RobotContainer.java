@@ -204,6 +204,8 @@ public class RobotContainer{
         .whileFalse(new SetShooterSpeed(m_shooter, 0, 0));
 
 
+
+        // camera controls --> driver controller: x and y buttons 
         m_driverController.x()
         .whileTrue(new CameraControl(m_camera, 0));
 
